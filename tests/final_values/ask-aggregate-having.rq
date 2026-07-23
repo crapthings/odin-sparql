@@ -1,0 +1,6 @@
+PREFIX : <urn:>
+
+ASK
+WHERE { ?subject :p ?object }
+HAVING (COUNT(?subject) > 1)
+VALUES ?subject { :ada }

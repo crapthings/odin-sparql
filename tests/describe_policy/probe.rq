@@ -1,0 +1,1 @@
+CONSTRUCT WHERE { ?target <urn:p> <urn:cora> }

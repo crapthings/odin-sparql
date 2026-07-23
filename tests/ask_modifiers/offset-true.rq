@@ -1,0 +1,6 @@
+PREFIX : <urn:>
+
+ASK { ?target :rank ?rank }
+ORDER BY DESC(?rank)
+OFFSET 2
+LIMIT 1

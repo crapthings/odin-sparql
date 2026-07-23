@@ -1,0 +1,2 @@
+<urn:seed> <urn:selects> _:details .
+_:details <urn:label> "selected" .

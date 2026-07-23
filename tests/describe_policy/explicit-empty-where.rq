@@ -1,0 +1,1 @@
+DESCRIBE <urn:ada> ?target WHERE { ?target <urn:p> <urn:missing> }

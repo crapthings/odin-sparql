@@ -1,0 +1,4 @@
+PREFIX : <urn:>
+
+ASK { ?target :rank ?rank }
+LIMIT 0

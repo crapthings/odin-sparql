@@ -1,0 +1,6 @@
+PREFIX : <urn:>
+
+CONSTRUCT { :summary :label ?label }
+WHERE { ?subject :tag ?tag }
+HAVING (COUNT(?tag) > 2)
+VALUES (?subject ?label) { (:ada "total") }

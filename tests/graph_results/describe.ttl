@@ -1,0 +1,4 @@
+<urn:source> <urn:iri> <urn:target> .
+<urn:source> <urn:plain> "plain" .
+<urn:source> <urn:language> "bonjour"@fr .
+<urn:source> <urn:typed> "7"^^<http://www.w3.org/2001/XMLSchema#integer> .

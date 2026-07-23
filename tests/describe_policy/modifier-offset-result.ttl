@@ -1,0 +1,2 @@
+<urn:bert> <urn:rank> 2 .
+<urn:bert> <urn:name> "Bert" .

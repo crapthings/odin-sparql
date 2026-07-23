@@ -1,0 +1,4 @@
+@prefix : <urn:> .
+
+:ada :tag "one", "two" ; :name "Ada" .
+:bert :tag "only" ; :name "Bert" .

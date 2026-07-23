@@ -1,0 +1,5 @@
+SELECT
+  (COUNT(DISTINCT CONCAT(STR(?value), "!")) AS ?count)
+  (SUM(DISTINCT (?value + 0)) AS ?sum)
+  (GROUP_CONCAT(DISTINCT CONCAT(STR(?value), "!"); SEPARATOR=",") AS ?joined)
+WHERE { ?subject <urn:value> ?value }

@@ -1,0 +1,4 @@
+SELECT ?value {
+  { SELECT ?value WHERE {} VALUES ?value { "Ada" "Bert" } }
+}
+ORDER BY ?value

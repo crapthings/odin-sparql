@@ -1,0 +1,5 @@
+PREFIX : <urn:>
+
+SELECT ?iri ?plain ?language ?typed {
+  :source :iri ?iri ; :plain ?plain ; :language ?language ; :typed ?typed
+}

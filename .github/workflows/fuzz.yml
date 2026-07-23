@@ -1,0 +1,42 @@
+name: fuzz
+
+on:
+  schedule:
+    - cron: '23 3 * * *'
+  workflow_dispatch:
+    inputs:
+      cases:
+        description: Number of generated inputs
+        required: false
+        default: '100000'
+      seed:
+        description: Reproducible unsigned 64-bit seed
+        required: false
+        default: '5720813349214897713'
+
+permissions:
+  contents: read
+
+concurrency:
+  group: fuzz-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  parser:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@93cb6efe18208431cddfb8368fd83d5badbf9bfd # v5
+      - uses: actions/checkout@93cb6efe18208431cddfb8368fd83d5badbf9bfd # v5
+        with:
+          repository: crapthings/odin-rdf
+          ref: 20f339d1977f14a99ed7962f547db27ba22ae512 # v0.31.0
+          path: _deps/odin-rdf
+      - uses: laytan/setup-odin@8536d8fa450ec6f1bd9ddc84bbaaf16296c0051d # v2.12.2
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+      - name: Run deterministic parser fuzzing under AddressSanitizer
+        env:
+          FUZZ_CASES: ${{ inputs.cases || '100000' }}
+          FUZZ_SEED: ${{ inputs.seed || github.run_id }}
+        run: odin run tests/fuzz -o:speed -sanitize:address -define:FUZZ_CASES="$FUZZ_CASES" -define:FUZZ_MAX_BYTES=1024 -define:FUZZ_SEED="$FUZZ_SEED" -collection:odin-rdf=_deps/odin-rdf

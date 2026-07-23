@@ -1,0 +1,4 @@
+@prefix : <urn:> .
+
+:bert :p "b" .
+:ada :p "a" .

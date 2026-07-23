@@ -1,0 +1,3 @@
+<urn:ada> <urn:tag> "one" .
+<urn:ada> <urn:tag> "two" .
+<urn:ada> <urn:name> "Ada" .

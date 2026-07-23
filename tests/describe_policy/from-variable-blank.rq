@@ -1,0 +1,1 @@
+DESCRIBE ?target FROM <urn:source> WHERE { <urn:seed> <urn:selects> ?target }

@@ -1,0 +1,5 @@
+PREFIX : <urn:>
+
+SELECT ?end {
+  :a :p{1,2} ?end
+}

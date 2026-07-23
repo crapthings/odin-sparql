@@ -1,0 +1,5 @@
+@prefix : <urn:> .
+
+:ada :rank 1 ; :name "Ada" .
+:bert :rank 2 ; :name "Bert" .
+:cora :rank 3 ; :name "Cora" .

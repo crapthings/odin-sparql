@@ -1,0 +1,3 @@
+SELECT (CONCAT(?value, "!") AS ?message)
+WHERE {}
+VALUES ?value { "Ada" }

@@ -1,0 +1,172 @@
+package results
+
+import "core:strings"
+import "core:testing"
+import rdf "odin-rdf:rdf"
+import sparql ".."
+import dataset "../dataset"
+import engine "../engine"
+
+@(test)
+test_graph_serializers_write_construct_result :: proc(t: ^testing.T) {
+	query, parse_error := sparql.Parse(`CONSTRUCT { ?s <urn:derived> ?o } WHERE { ?s <urn:p> ?o }`)
+	defer sparql.Destroy(&query)
+	testing.expect_value(t, sparql.Parse_Error_Code(parse_error), sparql.Error_Code.None)
+	store: dataset.Memory_Dataset
+	dataset.init(&store)
+	defer dataset.destroy(&store)
+	testing.expect_value(t, dataset.add(&store, rdf.default_graph_quad(rdf.Triple{subject = rdf.iri("urn:a"), predicate = rdf.iri("urn:p"), object = rdf.iri("urn:b")})), dataset.Error_Code.None)
+	dataset.seal(&store)
+	view, view_error := dataset.view(&store)
+	testing.expect_value(t, view_error, dataset.Error_Code.None)
+	result, execute_error := engine.execute(&query, view, {Max_Solutions = 8})
+	defer engine.destroy(&result)
+	testing.expect_value(t, execute_error, engine.Error_Code.None)
+	ntriples_output := strings.builder_make()
+	defer strings.builder_destroy(&ntriples_output)
+	testing.expect_value(t, write_ntriples(&ntriples_output, &result), Error_Code.None)
+	testing.expect_value(t, strings.to_string(ntriples_output), "<urn:a> <urn:derived> <urn:b> .\n")
+	turtle_output := strings.builder_make()
+	defer strings.builder_destroy(&turtle_output)
+	testing.expect_value(t, write_turtle(&turtle_output, &result), Error_Code.None)
+	testing.expect_value(t, strings.to_string(turtle_output), "<urn:a> <urn:derived> <urn:b> .\n")
+}
+
+@(test)
+test_sparql_json_writes_select_and_ask_results :: proc(t: ^testing.T) {
+	select, select_error := sparql.Parse(`SELECT ?value { <urn:a> <urn:p> ?value }`)
+	defer sparql.Destroy(&select)
+	ask, ask_error := sparql.Parse(`ASK { <urn:a> <urn:p> <urn:b> }`)
+	defer sparql.Destroy(&ask)
+	testing.expect_value(t, sparql.Parse_Error_Code(select_error), sparql.Error_Code.None)
+	testing.expect_value(t, sparql.Parse_Error_Code(ask_error), sparql.Error_Code.None)
+	store: dataset.Memory_Dataset
+	dataset.init(&store)
+	defer dataset.destroy(&store)
+	testing.expect_value(t, dataset.add(&store, rdf.default_graph_quad(rdf.Triple{subject = rdf.iri("urn:a"), predicate = rdf.iri("urn:p"), object = rdf.iri("urn:b")})), dataset.Error_Code.None)
+	dataset.seal(&store)
+	view, _ := dataset.view(&store)
+	result, execute_error := engine.execute(&select, view, {Max_Solutions = 8})
+	defer engine.destroy(&result)
+	testing.expect_value(t, execute_error, engine.Error_Code.None)
+	output := strings.builder_make()
+	defer strings.builder_destroy(&output)
+	testing.expect_value(t, write_sparql_json(&output, &result), Error_Code.None)
+	testing.expect_value(t, strings.to_string(output), "{\"head\":{\"vars\":[\"value\"]},\"results\":{\"bindings\":[{\"value\":{\"type\":\"uri\",\"value\":\"urn:b\"}}]}}")
+	xml_output := strings.builder_make()
+	defer strings.builder_destroy(&xml_output)
+	testing.expect_value(t, write_sparql_xml(&xml_output, &result), Error_Code.None)
+	testing.expect_value(t, strings.to_string(xml_output), "<?xml version=\"1.0\"?><sparql xmlns=\"http://www.w3.org/2005/sparql-results#\"><head><variable name=\"value\"/></head><results><result><binding name=\"value\"><uri>urn:b</uri></binding></result></results></sparql>")
+	ask_result, ask_execute_error := engine.execute(&ask, view, {Max_Solutions = 8})
+	defer engine.destroy(&ask_result)
+	testing.expect_value(t, ask_execute_error, engine.Error_Code.None)
+	ask_output := strings.builder_make()
+	defer strings.builder_destroy(&ask_output)
+	testing.expect_value(t, write_sparql_json(&ask_output, &ask_result), Error_Code.None)
+	testing.expect_value(t, strings.to_string(ask_output), "{\"head\":{},\"boolean\":true}")
+	ask_xml := strings.builder_make()
+	defer strings.builder_destroy(&ask_xml)
+	testing.expect_value(t, write_sparql_xml(&ask_xml, &ask_result), Error_Code.None)
+	testing.expect_value(t, strings.to_string(ask_xml), "<?xml version=\"1.0\"?><sparql xmlns=\"http://www.w3.org/2005/sparql-results#\"><head></head><boolean>true</boolean></sparql>")
+}
+
+@(test)
+test_sparql_result_serializers_preserve_term_kinds_escapes_and_false_ask :: proc(t: ^testing.T) {
+	select, select_error := sparql.Parse(`SELECT ?iri ?blank ?plain ?language ?typed {
+		<urn:source> <urn:iri> ?iri ; <urn:blank> ?blank ; <urn:plain> ?plain ; <urn:language> ?language ; <urn:typed> ?typed
+	}`)
+	defer sparql.Destroy(&select)
+	false_ask, false_ask_error := sparql.Parse(`ASK { <urn:source> <urn:missing> ?value }`)
+	defer sparql.Destroy(&false_ask)
+	testing.expect_value(t, sparql.Parse_Error_Code(select_error), sparql.Error_Code.None)
+	testing.expect_value(t, sparql.Parse_Error_Code(false_ask_error), sparql.Error_Code.None)
+	store: dataset.Memory_Dataset
+	dataset.init(&store)
+	defer dataset.destroy(&store)
+	blank_scope := rdf.new_blank_node_scope()
+	blank := rdf.blank_node("node", blank_scope)
+	source := rdf.iri("urn:source")
+	testing.expect_value(t, dataset.add(&store, rdf.default_graph_quad(rdf.Triple{subject = source, predicate = rdf.iri("urn:iri"), object = rdf.iri("urn:target")})), dataset.Error_Code.None)
+	testing.expect_value(t, dataset.add(&store, rdf.default_graph_quad(rdf.Triple{subject = source, predicate = rdf.iri("urn:blank"), object = blank})), dataset.Error_Code.None)
+	testing.expect_value(t, dataset.add(&store, rdf.default_graph_quad(rdf.Triple{subject = source, predicate = rdf.iri("urn:plain"), object = rdf.literal("line\n\"quoted\" & <tag>")})), dataset.Error_Code.None)
+	testing.expect_value(t, dataset.add(&store, rdf.default_graph_quad(rdf.Triple{subject = source, predicate = rdf.iri("urn:language"), object = rdf.language_literal("bonjour", "fr")})), dataset.Error_Code.None)
+	testing.expect_value(t, dataset.add(&store, rdf.default_graph_quad(rdf.Triple{subject = source, predicate = rdf.iri("urn:typed"), object = rdf.typed_literal("7", "http://www.w3.org/2001/XMLSchema#integer")})), dataset.Error_Code.None)
+	dataset.seal(&store)
+	view, view_error := dataset.view(&store)
+	testing.expect_value(t, view_error, dataset.Error_Code.None)
+	result, execute_error := engine.execute(&select, view, {Max_Solutions = 8})
+	defer engine.destroy(&result)
+	testing.expect_value(t, execute_error, engine.Error_Code.None)
+	json_output := strings.builder_make()
+	defer strings.builder_destroy(&json_output)
+	testing.expect_value(t, write_sparql_json(&json_output, &result), Error_Code.None)
+	testing.expect_value(t, strings.to_string(json_output), `{"head":{"vars":["iri","blank","plain","language","typed"]},"results":{"bindings":[{"iri":{"type":"uri","value":"urn:target"},"blank":{"type":"bnode","value":"node"},"plain":{"type":"literal","value":"line\n\"quoted\" & <tag>"},"language":{"type":"literal","value":"bonjour","xml:lang":"fr"},"typed":{"type":"literal","value":"7","datatype":"http://www.w3.org/2001/XMLSchema#integer"}}]}}`)
+	xml_output := strings.builder_make()
+	defer strings.builder_destroy(&xml_output)
+	testing.expect_value(t, write_sparql_xml(&xml_output, &result), Error_Code.None)
+	testing.expect_value(t, strings.to_string(xml_output), "<?xml version=\"1.0\"?><sparql xmlns=\"http://www.w3.org/2005/sparql-results#\"><head><variable name=\"iri\"/><variable name=\"blank\"/><variable name=\"plain\"/><variable name=\"language\"/><variable name=\"typed\"/></head><results><result><binding name=\"iri\"><uri>urn:target</uri></binding><binding name=\"blank\"><bnode>node</bnode></binding><binding name=\"plain\"><literal>line\n&quot;quoted&quot; &amp; &lt;tag&gt;</literal></binding><binding name=\"language\"><literal xml:lang=\"fr\">bonjour</literal></binding><binding name=\"typed\"><literal datatype=\"http://www.w3.org/2001/XMLSchema#integer\">7</literal></binding></result></results></sparql>")
+	false_result, false_execute_error := engine.execute(&false_ask, view, {Max_Solutions = 8})
+	defer engine.destroy(&false_result)
+	testing.expect_value(t, false_execute_error, engine.Error_Code.None)
+	false_json := strings.builder_make()
+	defer strings.builder_destroy(&false_json)
+	testing.expect_value(t, write_sparql_json(&false_json, &false_result), Error_Code.None)
+	testing.expect_value(t, strings.to_string(false_json), "{\"head\":{},\"boolean\":false}")
+	false_xml := strings.builder_make()
+	defer strings.builder_destroy(&false_xml)
+	testing.expect_value(t, write_sparql_xml(&false_xml, &false_result), Error_Code.None)
+	testing.expect_value(t, strings.to_string(false_xml), "<?xml version=\"1.0\"?><sparql xmlns=\"http://www.w3.org/2005/sparql-results#\"><head></head><boolean>false</boolean></sparql>")
+}
+
+@(test)
+test_sparql_xml_rejects_xml1_forbidden_characters_atomically :: proc(t: ^testing.T) {
+	query, parse_error := sparql.Parse(`SELECT ?value { <urn:source> <urn:value> ?value }`)
+	defer sparql.Destroy(&query)
+	testing.expect_value(t, sparql.Parse_Error_Code(parse_error), sparql.Error_Code.None)
+	store: dataset.Memory_Dataset
+	dataset.init(&store)
+	defer dataset.destroy(&store)
+	testing.expect_value(t, dataset.add(&store, rdf.default_graph_quad(rdf.Triple{subject = rdf.iri("urn:source"), predicate = rdf.iri("urn:value"), object = rdf.literal("\x01")})), dataset.Error_Code.None)
+	dataset.seal(&store)
+	view, view_error := dataset.view(&store)
+	testing.expect_value(t, view_error, dataset.Error_Code.None)
+	result, execute_error := engine.execute(&query, view, {Max_Solutions = 8})
+	defer engine.destroy(&result)
+	testing.expect_value(t, execute_error, engine.Error_Code.None)
+	output := strings.builder_make()
+	defer strings.builder_destroy(&output)
+	strings.write_string(&output, "unchanged")
+	testing.expect_value(t, write_sparql_xml(&output, &result), Error_Code.Invalid_XML_Character)
+	testing.expect_value(t, strings.to_string(output), "unchanged")
+}
+
+@(test)
+test_sparql_csv_and_tsv_write_bound_terms_unbound_cells_and_escaped_values :: proc(t: ^testing.T) {
+	query, parse_error := sparql.Parse(`SELECT ?iri ?text ?blank ?missing {
+		<urn:source> <urn:iri> ?iri ; <urn:text> ?text ; <urn:blank> ?blank
+		OPTIONAL { <urn:source> <urn:missing> ?missing }
+	}`)
+	defer sparql.Destroy(&query)
+	testing.expect_value(t, sparql.Parse_Error_Code(parse_error), sparql.Error_Code.None)
+	store: dataset.Memory_Dataset
+	dataset.init(&store)
+	defer dataset.destroy(&store)
+	blank := rdf.blank_node("source-label", rdf.new_blank_node_scope())
+	testing.expect_value(t, dataset.add(&store, rdf.default_graph_quad(rdf.Triple{subject = rdf.iri("urn:source"), predicate = rdf.iri("urn:iri"), object = rdf.iri("urn:target")})), dataset.Error_Code.None)
+	testing.expect_value(t, dataset.add(&store, rdf.default_graph_quad(rdf.Triple{subject = rdf.iri("urn:source"), predicate = rdf.iri("urn:text"), object = rdf.literal(`a,"b"`)})), dataset.Error_Code.None)
+	testing.expect_value(t, dataset.add(&store, rdf.default_graph_quad(rdf.Triple{subject = rdf.iri("urn:source"), predicate = rdf.iri("urn:blank"), object = blank})), dataset.Error_Code.None)
+	dataset.seal(&store)
+	view, view_error := dataset.view(&store)
+	testing.expect_value(t, view_error, dataset.Error_Code.None)
+	result, execute_error := engine.execute(&query, view, {Max_Solutions = 8})
+	defer engine.destroy(&result)
+	testing.expect_value(t, execute_error, engine.Error_Code.None)
+	csv_output := strings.builder_make()
+	defer strings.builder_destroy(&csv_output)
+	testing.expect_value(t, write_sparql_csv(&csv_output, &result), Error_Code.None)
+	testing.expect_value(t, strings.to_string(csv_output), "iri,text,blank,missing\nurn:target,\"a,\"\"b\"\"\",_:a,\n")
+	tsv_output := strings.builder_make()
+	defer strings.builder_destroy(&tsv_output)
+	testing.expect_value(t, write_sparql_tsv(&tsv_output, &result), Error_Code.None)
+	testing.expect_value(t, strings.to_string(tsv_output), "?iri\t?text\t?blank\t?missing\n<urn:target>\t\"a,\\\"b\\\"\"\t_:b0\t\n")
+}

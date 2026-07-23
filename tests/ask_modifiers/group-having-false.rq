@@ -1,0 +1,5 @@
+PREFIX : <urn:>
+
+ASK { ?target :tag ?tag }
+GROUP BY ?target
+HAVING (COUNT(?tag) > 2)

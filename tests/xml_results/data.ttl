@@ -1,0 +1,7 @@
+@prefix : <urn:> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+:source :iri :target ;
+  :plain "plain" ;
+  :language "bonjour"@fr ;
+  :typed "7"^^xsd:integer .

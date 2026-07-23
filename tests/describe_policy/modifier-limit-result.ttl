@@ -1,0 +1,2 @@
+<urn:cora> <urn:rank> 3 .
+<urn:cora> <urn:name> "Cora" .

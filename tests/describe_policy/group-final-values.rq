@@ -1,0 +1,6 @@
+PREFIX : <urn:>
+
+DESCRIBE ?target
+WHERE { ?target :tag ?tag }
+HAVING (COUNT(?tag) > 2)
+VALUES ?target { :ada }

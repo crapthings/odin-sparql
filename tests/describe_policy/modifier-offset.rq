@@ -1,0 +1,7 @@
+PREFIX : <urn:>
+
+DESCRIBE ?target
+WHERE { ?target :rank ?rank }
+ORDER BY DESC(?rank)
+OFFSET 1
+LIMIT 1

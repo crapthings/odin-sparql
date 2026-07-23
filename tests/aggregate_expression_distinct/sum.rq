@@ -1,0 +1,2 @@
+SELECT (SUM(DISTINCT (?value + 0)) AS ?sum)
+WHERE { ?subject <urn:value> ?value }

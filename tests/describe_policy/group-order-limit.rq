@@ -1,0 +1,7 @@
+PREFIX : <urn:>
+
+DESCRIBE ?target
+WHERE { ?target :tag ?tag }
+GROUP BY ?target
+ORDER BY DESC(COUNT(?tag))
+LIMIT 1

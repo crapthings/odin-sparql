@@ -1,0 +1,7 @@
+PREFIX : <urn:>
+
+CONSTRUCT { ?target :selected ?name }
+WHERE { ?target :tag ?tag ; :name ?name }
+GROUP BY ?target ?name
+ORDER BY DESC(COUNT(?tag))
+LIMIT 1

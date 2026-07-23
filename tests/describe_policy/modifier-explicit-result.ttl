@@ -1,0 +1,4 @@
+<urn:ada> <urn:rank> 1 .
+<urn:ada> <urn:name> "Ada" .
+<urn:cora> <urn:rank> 3 .
+<urn:cora> <urn:name> "Cora" .

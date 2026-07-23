@@ -1,0 +1,6 @@
+PREFIX : <urn:>
+
+DESCRIBE ?target
+WHERE { ?target :tag ?tag }
+GROUP BY ?target
+HAVING (COUNT(?tag) > 1)

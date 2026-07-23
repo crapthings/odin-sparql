@@ -1,0 +1,5 @@
+@prefix : <urn:> .
+
+:ada :rank 1 ; :tag "one", "two" .
+:bert :rank 2 ; :tag "only" .
+:cora :rank 3 .
