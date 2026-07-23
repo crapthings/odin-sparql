@@ -4,4 +4,5 @@
 *.o
 *.obj
 .DS_Store
+/AGENTS.md
 /.cache/
