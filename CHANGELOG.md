@@ -4,6 +4,15 @@ This project follows [Semantic Versioning](https://semver.org/).
 
 ## Unreleased
 
+## 0.2.0 - 2026-07-24
+
+- Add the optional `sparql/graph_dataset` public package. It provides the
+  standard Dataset sink and View boundary over an owned bounded `odin-graph`
+  graph, including default/named graph scope, set semantics, limits, sealing,
+  and public-engine query execution. Existing `Memory_Dataset` callers keep
+  their current dependency and behavior; graph-backed storage is an explicit
+  opt-in.
+
 ## 0.1.2 - 2026-07-24
 
 - Add release-gated `Memory_Dataset` regressions for blank-node scope,
