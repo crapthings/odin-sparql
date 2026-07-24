@@ -3,10 +3,15 @@ set -eu
 
 root=$(CDPATH= cd -- "$(dirname -- "$0")/.." && pwd)
 odin_rdf=${ODIN_RDF_COLLECTION:-"$root/../odin-rdf"}
+odin_graph=${ODIN_GRAPH_COLLECTION:-"$root/../odin-graph"}
 w3c_root=${W3C_TEST_ROOT:-"$root/../odin-rdf/.cache/w3c-rdf-tests-d3e844aaa3e2f2b5250f2d1c988ce58870d6bc86"}
 
 if [ ! -d "$odin_rdf" ]; then
   printf '%s\n' 'ODIN_RDF_COLLECTION must name an odin-rdf checkout' >&2
+  exit 2
+fi
+if [ ! -d "$odin_graph" ]; then
+  printf '%s\n' 'ODIN_GRAPH_COLLECTION must name an odin-graph checkout' >&2
   exit 2
 fi
 if [ ! -f "$w3c_root/sparql/sparql11/syntax-query/manifest.ttl" ]; then
@@ -19,6 +24,7 @@ sh "$root/scripts/check-release-facts.sh"
 odin check "$root/sparql" -no-entry-point -vet -warnings-as-errors -collection:odin-rdf="$odin_rdf"
 odin check "$root/sparql/internal/lexer" -no-entry-point -vet -warnings-as-errors -collection:odin-rdf="$odin_rdf"
 odin check "$root/sparql/dataset" -no-entry-point -vet -warnings-as-errors -collection:odin-rdf="$odin_rdf"
+odin check "$root/sparql/graph_dataset" -no-entry-point -vet -warnings-as-errors -collection:odin-rdf="$odin_rdf" -collection:odin-graph="$odin_graph" -collection:odin-sparql="$root"
 odin check "$root/sparql/results" -no-entry-point -vet -warnings-as-errors -collection:odin-rdf="$odin_rdf"
 odin check "$root/benchmarks/bgp" -no-entry-point -vet -warnings-as-errors -collection:odin-rdf="$odin_rdf"
 odin check "$root/examples/minimal" -no-entry-point -vet -warnings-as-errors -collection:odin-rdf="$odin_rdf"
@@ -41,6 +47,7 @@ odin test "$root/sparql/engine" -o:speed -collection:odin-rdf="$odin_rdf"
 odin test "$root/tests/public_parser" -collection:odin-rdf="$odin_rdf"
 odin test "$root/tests/public_engine" -collection:odin-rdf="$odin_rdf"
 odin test "$root/tests/dataset" -collection:odin-rdf="$odin_rdf"
+odin test "$root/sparql/graph_dataset" -collection:odin-rdf="$odin_rdf" -collection:odin-graph="$odin_graph" -collection:odin-sparql="$root"
 odin test "$root/tests/property" -collection:odin-rdf="$odin_rdf"
 odin run "$root/examples/minimal" -collection:odin-rdf="$odin_rdf"
 odin run "$root/examples/custom_view" -collection:odin-rdf="$odin_rdf"

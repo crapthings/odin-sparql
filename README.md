@@ -104,6 +104,7 @@ are the source of truth for signatures, ownership, limits, and error behavior.
 | --- | --- | --- |
 | `sparql` | Parse owned queries, inspect diagnostics, and traverse the read-only source AST | [Parser API](docs/public-parser-api.md) |
 | `sparql/dataset` | Create sealed in-memory Datasets or expose an application-owned graph-scoped scan adapter | [Dataset API](docs/dataset-api.md) |
+| `sparql/graph_dataset` | Opt in to an `odin-graph`-backed Dataset while retaining the same public View boundary | [Graph migration contract](../odin-garden/docs/candidate-shared-graph-contract.md) |
 | `sparql/engine` | Execute a query with bounded options, callbacks, execution statistics, and owned results | [Query execution API](docs/query-execution-api.md) |
 | `sparql/results` | Serialize SELECT/ASK and graph results in the supported standard formats | [Graph-result and serialization design](docs/m6-graph-results-design.md) |
 

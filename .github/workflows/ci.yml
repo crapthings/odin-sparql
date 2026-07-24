@@ -22,6 +22,11 @@ jobs:
           repository: crapthings/odin-rdf
           ref: 20f339d1977f14a99ed7962f547db27ba22ae512 # v0.31.0
           path: _deps/odin-rdf
+      - uses: actions/checkout@93cb6efe18208431cddfb8368fd83d5badbf9bfd # v5
+        with:
+          repository: crapthings/odin-graph
+          ref: v0.1.0
+          path: _deps/odin-graph
       - uses: laytan/setup-odin@8536d8fa450ec6f1bd9ddc84bbaaf16296c0051d # v2.12.2
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
@@ -32,6 +37,7 @@ jobs:
       - run: odin test tests/public_parser -collection:odin-rdf=_deps/odin-rdf
       - run: odin test tests/public_engine -collection:odin-rdf=_deps/odin-rdf
       - run: odin test tests/dataset -collection:odin-rdf=_deps/odin-rdf
+      - run: odin test sparql/graph_dataset -collection:odin-rdf=_deps/odin-rdf -collection:odin-graph=_deps/odin-graph -collection:odin-sparql=.
       - run: odin test tests/property -collection:odin-rdf=_deps/odin-rdf
       - run: odin run examples/minimal -collection:odin-rdf=_deps/odin-rdf
       - run: odin run examples/custom_view -collection:odin-rdf=_deps/odin-rdf
@@ -50,6 +56,11 @@ jobs:
           repository: crapthings/odin-rdf
           ref: 20f339d1977f14a99ed7962f547db27ba22ae512 # v0.31.0
           path: _deps/odin-rdf
+      - uses: actions/checkout@93cb6efe18208431cddfb8368fd83d5badbf9bfd # v5
+        with:
+          repository: crapthings/odin-graph
+          ref: v0.1.0
+          path: _deps/odin-graph
       - uses: laytan/setup-odin@8536d8fa450ec6f1bd9ddc84bbaaf16296c0051d # v2.12.2
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
@@ -57,6 +68,7 @@ jobs:
       - run: odin check sparql -no-entry-point -vet -warnings-as-errors -collection:odin-rdf=_deps/odin-rdf
       - run: odin check sparql/internal/lexer -no-entry-point -vet -warnings-as-errors -collection:odin-rdf=_deps/odin-rdf
       - run: odin check sparql/dataset -no-entry-point -vet -warnings-as-errors -collection:odin-rdf=_deps/odin-rdf
+      - run: odin check sparql/graph_dataset -no-entry-point -vet -warnings-as-errors -collection:odin-rdf=_deps/odin-rdf -collection:odin-graph=_deps/odin-graph -collection:odin-sparql=.
       - run: odin check sparql/results -no-entry-point -vet -warnings-as-errors -collection:odin-rdf=_deps/odin-rdf
       - run: odin check benchmarks/bgp -no-entry-point -vet -warnings-as-errors -collection:odin-rdf=_deps/odin-rdf
       - run: odin check examples/minimal -no-entry-point -vet -warnings-as-errors -collection:odin-rdf=_deps/odin-rdf
@@ -68,6 +80,7 @@ jobs:
       - run: odin test tests/public_parser -sanitize:address -collection:odin-rdf=_deps/odin-rdf
       - run: odin test tests/public_engine -sanitize:address -collection:odin-rdf=_deps/odin-rdf
       - run: odin test tests/dataset -sanitize:address -collection:odin-rdf=_deps/odin-rdf
+      - run: odin test sparql/graph_dataset -sanitize:address -collection:odin-rdf=_deps/odin-rdf -collection:odin-graph=_deps/odin-graph -collection:odin-sparql=.
       - run: odin test tests/property -sanitize:address -collection:odin-rdf=_deps/odin-rdf
       - run: odin run tests/fuzz -sanitize:address -define:FUZZ_CASES=5000 -define:FUZZ_MAX_BYTES=512 -collection:odin-rdf=_deps/odin-rdf
       - run: odin test sparql/algebra -sanitize:address -collection:odin-rdf=_deps/odin-rdf
