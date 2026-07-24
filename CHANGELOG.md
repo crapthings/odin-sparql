@@ -4,6 +4,13 @@ This project follows [Semantic Versioning](https://semver.org/).
 
 ## Unreleased
 
+## 0.1.0 - 2026-07-24
+
+- First public release of the bounded, dataset-agnostic SPARQL 1.1 Query
+  parser and execution engine. The stable pre-1.0 package surface is
+  `sparql`, `sparql/dataset`, `sparql/engine`, and `sparql/results`; SPARQL
+  Update, protocol/HTTP endpoints, graph storage, and entailment remain
+  outside this release's scope.
 - Prove from an external consumer package that `engine.Execution_Statistics`
   is usable without importing `sparql/eval`, and that its documented BGP scan,
   candidate, match, and solution counters accumulate through a custom View.
