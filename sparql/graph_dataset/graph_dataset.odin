@@ -1,5 +1,6 @@
 // Package graph_dataset exposes odin-graph through odin-sparql's public View
-// boundary without changing the existing Memory_Dataset implementation.
+// boundary as a focused adapter test surface. Memory_Dataset now uses the same
+// Graph kernel directly.
 package graph_dataset
 
 import rdf "odin-rdf:rdf"
@@ -16,8 +17,8 @@ Options :: struct {
 }
 
 // Dataset owns one graph.Graph and exposes it after sealing through the public
-// SPARQL Dataset View. It is an opt-in migration surface; Memory_Dataset stays
-// source-compatible and unchanged.
+// SPARQL Dataset View. It remains useful for adapter-focused tests; the main
+// Memory_Dataset uses the same Graph kernel directly.
 Dataset :: struct {
 	storage: graph.Graph,
 	adapter: graph_sparql.View,

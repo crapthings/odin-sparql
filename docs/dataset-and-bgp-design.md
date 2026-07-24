@@ -37,11 +37,11 @@ snapshot-state outcome.
 
 ## RDF set semantics and ownership
 
-`Memory_Dataset` owns cloned RDF term strings and deduplicates equal default or
-named quads on insertion. It is intentionally unlike `odin-rdf`'s parser
-collector, which preserves source order and duplicate records. The graph mode
-is applied at scan time, so retained named quads participate only in explicit
-named-graph scans.
+`Memory_Dataset` owns cloned RDF term strings through its shared Graph storage
+and deduplicates equal default or named quads on insertion. It is intentionally
+unlike `odin-rdf`'s parser collector, which preserves source order and
+duplicate records. The graph mode is applied at scan time, so retained named
+quads participate only in explicit named-graph scans.
 
 Terms and quads emitted by a view borrow from the Dataset; a scan sink must not
 retain them after the Dataset is destroyed. A Dataset never owns terms supplied

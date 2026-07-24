@@ -30,6 +30,6 @@ BENCH_RUNS=1 BENCH_RECORDS=100 BENCH_ROUNDS=1 ./scripts/run-benchmarks.sh
 ```
 
 Compare the median of each process's best round only on the same machine,
-compiler, and configuration. The Memory_Dataset deliberately uses linear
-scans, so this benchmark chooses no index policy; it is a baseline for deciding
-whether a future dataset adapter or index is justified.
+compiler, and configuration. `Memory_Dataset` freezes shared Graph indexes at
+seal time, so the benchmark measures the current indexed implementation while
+keeping the engine's BGP ordering policy explicit.

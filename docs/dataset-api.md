@@ -6,17 +6,17 @@ loading, indexes, synchronization policy, or network behavior. Applications
 either use the bounded in-memory implementation or expose an owned snapshot
 through `custom_view`.
 
-This is the pre-1.0 contract proposed for the stable Dataset API. Changes to
-graph-scope matching, ownership, lifecycle, early-stop behavior, or error
-codes are compatibility changes and must be recorded in the changelog.
+The implementation is still evolving, but graph-scope matching, ownership,
+lifecycle, early-stop behavior, and error codes are constrained by the SPARQL
+W3C gates and the tests in this repository.
 
 ## In-memory lifecycle
 
-`Memory_Dataset` owns a set of RDF quads. Initialize it before use, add quads
-or a Collector snapshot, seal it, obtain a borrowed View, then destroy it when
-no scan or execution still uses that View. `init` preserves the legacy
-memory-governed capacity. Applications that ingest untrusted or otherwise
-bounded data can use `init_with_options` with a distinct-quad limit:
+`Memory_Dataset` presents SPARQL's Dataset API over one owned `odin-graph`
+store. Initialize it before use, add quads or a Collector snapshot, seal it,
+obtain a borrowed View, then destroy it when no scan or execution still uses
+that View. Applications that ingest untrusted or otherwise bounded data can
+use `init_with_options` with a distinct-quad limit:
 
 ```odin
 store: dataset.Memory_Dataset
@@ -48,9 +48,10 @@ Dataset.
 `add` validates and copies every term string; callers may immediately reuse or
 destroy their input. Equal quads are accepted as no-ops, so `quad_count`
 reports RDF Dataset set cardinality across both default and named graphs.
-After `seal`, `add` and `add_collector` return `Sealed`; `seal` itself is
-idempotent. `view` also returns `Sealed` before sealing. A View borrows its
-dataset and becomes invalid when its `Memory_Dataset` is destroyed.
+After `seal`, Graph builds immutable scan indexes; `add` and `add_collector`
+return `Sealed`, and `seal` itself is idempotent. `view` also returns `Sealed`
+before sealing. A View borrows its dataset and becomes invalid when its
+`Memory_Dataset` is destroyed.
 
 `add_collector` is the explicit copying ingestion adapter from
 `odin-rdf:rdf/dataset.Collector`. It applies the same validation and set

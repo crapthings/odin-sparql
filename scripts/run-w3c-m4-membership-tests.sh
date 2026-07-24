@@ -3,6 +3,7 @@ set -eu
 
 root=$(CDPATH= cd -- "$(dirname -- "$0")/.." && pwd)
 odin_rdf=${ODIN_RDF_COLLECTION:-"$root/../odin-rdf"}
+odin_graph=${ODIN_GRAPH_COLLECTION:-"$root/../odin-graph"}
 if [ -n "${W3C_M4_MEMBERSHIP_SUITE:-}" ]; then
   suite=$W3C_M4_MEMBERSHIP_SUITE
 else
@@ -14,7 +15,7 @@ runner="$root/.cache/odin-sparql-basic-runner"
 fixture_root=${suite%/sparql/sparql11/functions}
 data="$fixture_root/sparql/sparql10/expr-builtin/data-builtin-1.ttl"
 
-odin build "$root/tests/w3c/basic_runner" -out:"$runner" -collection:odin-rdf="$odin_rdf"
+odin build "$root/tests/w3c/basic_runner" -out:"$runner" -collection:odin-rdf="$odin_rdf" -collection:odin-graph="$odin_graph"
 
 total=0
 failed=0
