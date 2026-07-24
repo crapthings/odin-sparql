@@ -1,0 +1,291 @@
+<!doctype html>
+<html lang="en" class="scroll-smooth bg-slate-950">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>odin-sparql — Bounded SPARQL 1.1 for Odin</title>
+  <meta name="description" content="A bounded, dataset-agnostic SPARQL 1.1 Query parser and execution engine for Odin. Bring your RDF data, storage, and transport policy.">
+  <meta name="keywords" content="Odin, SPARQL, SPARQL 1.1, RDF, query engine, semantic web, linked data, graph query, W3C">
+  <meta name="author" content="odin-sparql contributors">
+  <meta name="theme-color" content="#020617">
+  <link rel="canonical" href="https://crapthings.github.io/odin-sparql/">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://crapthings.github.io/odin-sparql/">
+  <meta property="og:title" content="odin-sparql — Bounded SPARQL 1.1 for Odin">
+  <meta property="og:description" content="An embeddable, bounded SPARQL 1.1 query engine that leaves RDF storage, networking, and policy under application control.">
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="odin-sparql — Bounded SPARQL 1.1 for Odin">
+  <meta name="twitter:description" content="An embeddable, bounded SPARQL 1.1 query engine for Odin.">
+  <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+</head>
+<body class="min-h-screen bg-slate-950 font-sans text-slate-100 antialiased selection:bg-cyan-300 selection:text-slate-950">
+  <div class="pointer-events-none fixed inset-0 -z-10 overflow-hidden" aria-hidden="true">
+    <div class="absolute left-[12%] top-[-14rem] h-[36rem] w-[36rem] rounded-full bg-cyan-500/15 blur-3xl"></div>
+    <div class="absolute bottom-[-18rem] right-[-8rem] h-[42rem] w-[42rem] rounded-full bg-indigo-500/15 blur-3xl"></div>
+  </div>
+
+  <header class="sticky top-0 z-50 border-b border-white/10 bg-slate-950/80 backdrop-blur-xl">
+    <nav class="mx-auto flex max-w-7xl items-center justify-between px-6 py-4 lg:px-8" aria-label="Primary navigation">
+      <a href="#top" class="flex items-center gap-3 rounded-lg text-sm font-semibold tracking-tight text-white focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-cyan-300">
+        <span class="grid h-8 w-8 place-items-center rounded-lg border border-cyan-300/30 bg-cyan-300 font-mono text-xs font-bold text-slate-950">SP</span>
+        <span>odin-sparql</span>
+      </a>
+      <div class="hidden items-center gap-7 text-sm text-slate-300 sm:flex">
+        <a href="#guarantees" class="rounded transition hover:text-white focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-cyan-300">Guarantees</a>
+        <a href="#surface" class="rounded transition hover:text-white focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-cyan-300">Surface</a>
+        <a href="#quickstart" class="rounded transition hover:text-white focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-cyan-300">Quick start</a>
+        <a href="#evidence" class="rounded transition hover:text-white focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-cyan-300">Evidence</a>
+      </div>
+      <a href="https://github.com/crapthings/odin-sparql" class="rounded-lg border border-white/15 bg-white/5 px-4 py-2 text-sm font-medium text-white shadow-sm transition hover:border-cyan-300/45 hover:bg-white/10 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-cyan-300" aria-label="View odin-sparql source on GitHub">View source</a>
+    </nav>
+  </header>
+
+  <main id="top">
+    <section class="mx-auto grid max-w-7xl gap-16 px-6 pb-24 pt-20 lg:grid-cols-[1.03fr_.97fr] lg:px-8 lg:pb-32 lg:pt-28">
+      <div class="flex flex-col justify-center">
+        <div class="mb-7 flex flex-wrap gap-2">
+          <span class="rounded-full border border-cyan-300/25 bg-cyan-300/10 px-3 py-1 font-mono text-xs text-cyan-200">SPARQL 1.1 Query</span>
+          <span class="rounded-full border border-indigo-300/25 bg-indigo-300/10 px-3 py-1 font-mono text-xs text-indigo-200">v0.1.0</span>
+          <span class="rounded-full border border-white/15 bg-white/5 px-3 py-1 font-mono text-xs text-slate-300">MIT</span>
+        </div>
+        <h1 class="max-w-4xl text-5xl font-semibold leading-[1.03] tracking-[-0.045em] text-white sm:text-6xl lg:text-7xl">
+          Query RDF.<br>
+          <span class="text-cyan-200">Keep control.</span>
+        </h1>
+        <p class="mt-7 max-w-2xl text-lg leading-8 text-slate-300 sm:text-xl">
+          An embeddable SPARQL 1.1 Query parser and execution engine for Odin. Bring your own RDF data and storage; retain ownership of limits, lifetimes, networking, and source policy.
+        </p>
+        <div class="mt-10 flex flex-col gap-3 sm:flex-row">
+          <a href="#quickstart" class="inline-flex items-center justify-center rounded-xl bg-cyan-300 px-5 py-3 text-sm font-semibold text-slate-950 shadow-lg shadow-cyan-950/20 transition hover:bg-cyan-200 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-cyan-300">Run the example</a>
+          <a href="https://github.com/crapthings/odin-sparql/blob/main/docs/query-execution-api.md" class="inline-flex items-center justify-center rounded-xl border border-white/15 bg-white/5 px-5 py-3 text-sm font-semibold text-white transition hover:border-white/30 hover:bg-white/10 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-cyan-300">Read the API</a>
+        </div>
+        <dl class="mt-12 grid max-w-xl grid-cols-3 gap-6 border-t border-white/10 pt-7">
+          <div>
+            <dt class="font-mono text-2xl font-semibold text-white">94/94</dt>
+            <dd class="mt-1 text-xs leading-5 text-slate-400">Pinned W3C syntax cases</dd>
+          </div>
+          <div>
+            <dt class="font-mono text-2xl font-semibold text-white">3 OS</dt>
+            <dd class="mt-1 text-xs leading-5 text-slate-400">Linux, macOS, Windows</dd>
+          </div>
+          <div>
+            <dt class="font-mono text-2xl font-semibold text-white">Bounded</dt>
+            <dd class="mt-1 text-xs leading-5 text-slate-400">Explicit execution limits</dd>
+          </div>
+        </dl>
+      </div>
+
+      <div class="relative flex items-center">
+        <div class="absolute -inset-8 rounded-[2.5rem] bg-gradient-to-br from-cyan-400/20 via-transparent to-indigo-400/20 blur-2xl"></div>
+        <div class="relative w-full overflow-hidden rounded-2xl border border-white/15 bg-slate-900 shadow-2xl shadow-black/35">
+          <div class="flex items-center justify-between border-b border-white/10 px-5 py-3">
+            <div class="flex gap-2" aria-hidden="true">
+              <span class="h-2.5 w-2.5 rounded-full bg-rose-300"></span>
+              <span class="h-2.5 w-2.5 rounded-full bg-amber-300"></span>
+              <span class="h-2.5 w-2.5 rounded-full bg-cyan-300"></span>
+            </div>
+            <span class="font-mono text-[11px] text-slate-400">examples/minimal/main.odin</span>
+          </div>
+          <pre class="overflow-x-auto p-6 text-[13px] leading-7 text-slate-100 sm:p-8 sm:text-sm"><code><span class="text-cyan-200">import</span> sparql <span class="text-amber-200">"../../sparql"</span>
+<span class="text-cyan-200">import</span> dataset <span class="text-amber-200">"../../sparql/dataset"</span>
+<span class="text-cyan-200">import</span> engine <span class="text-amber-200">"../../sparql/engine"</span>
+
+query, parse_error := sparql.Parse(
+  <span class="text-amber-200">`SELECT ?name WHERE {
+     &lt;urn:ada&gt; &lt;urn:name&gt; ?name
+   }`</span>,
+)
+<span class="text-cyan-200">defer</span> sparql.Destroy(&amp;query)
+
+store: dataset.Memory_Dataset
+dataset.init(&amp;store)
+<span class="text-cyan-200">defer</span> dataset.destroy(&amp;store)
+
+<span class="text-slate-400">// Add application-owned RDF data, seal it,</span>
+<span class="text-slate-400">// then execute with explicit limits.</span>
+result, execute_error := engine.execute(
+  &amp;query, view, {Max_Solutions = <span class="text-violet-200">8</span>},
+)</code></pre>
+          <div class="border-t border-white/10 bg-black/15 px-6 py-4 font-mono text-xs text-cyan-200">
+            ✓ parser · ✓ owned results · ✓ explicit resource limits
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="border-y border-white/10 bg-white/[0.035]">
+      <div class="mx-auto max-w-7xl px-6 py-10 lg:px-8">
+        <p class="text-center font-mono text-xs uppercase tracking-[0.24em] text-slate-400">A focused query layer for application-owned RDF</p>
+        <div class="mt-7 grid grid-cols-2 gap-4 text-center text-sm font-medium text-slate-300 sm:grid-cols-5">
+          <span>SELECT / ASK</span>
+          <span>CONSTRUCT</span>
+          <span>Property paths</span>
+          <span>Custom Views</span>
+          <span>Result writers</span>
+        </div>
+      </div>
+    </section>
+
+    <section id="guarantees" class="mx-auto max-w-7xl px-6 py-24 lg:px-8 lg:py-32">
+      <div class="max-w-2xl">
+        <p class="font-mono text-xs font-semibold uppercase tracking-[0.22em] text-cyan-200">Designed for integration</p>
+        <h2 class="mt-4 text-3xl font-semibold tracking-tight text-white sm:text-5xl">Small surface. Clear boundaries.</h2>
+        <p class="mt-5 text-lg leading-8 text-slate-300">The engine is deliberately a query layer, not a hidden database or network client. Its contracts make the important decisions visible to the application.</p>
+      </div>
+      <div class="mt-14 grid gap-5 md:grid-cols-2 lg:grid-cols-3">
+        <article class="rounded-2xl border border-white/10 bg-white/[0.045] p-7 shadow-sm transition hover:-translate-y-0.5 hover:border-cyan-300/30 hover:bg-white/[0.075]">
+          <span class="font-mono text-sm text-cyan-200">01 / bound</span>
+          <h3 class="mt-5 text-xl font-semibold text-white">Limits are explicit</h3>
+          <p class="mt-3 leading-7 text-slate-300">Set solution and numeric limits at execution. Queries fail clearly at their boundary instead of relying on hidden truncation.</p>
+        </article>
+        <article class="rounded-2xl border border-white/10 bg-white/[0.045] p-7 shadow-sm transition hover:-translate-y-0.5 hover:border-cyan-300/30 hover:bg-white/[0.075]">
+          <span class="font-mono text-sm text-cyan-200">02 / own</span>
+          <h3 class="mt-5 text-xl font-semibold text-white">Storage stays yours</h3>
+          <p class="mt-3 leading-7 text-slate-300">Use the sealed in-memory Dataset or expose your own graph-scoped, streaming View over a snapshot or index.</p>
+        </article>
+        <article class="rounded-2xl border border-white/10 bg-white/[0.045] p-7 shadow-sm transition hover:-translate-y-0.5 hover:border-cyan-300/30 hover:bg-white/[0.075]">
+          <span class="font-mono text-sm text-cyan-200">03 / connect</span>
+          <h3 class="mt-5 text-xl font-semibold text-white">No hidden I/O</h3>
+          <p class="mt-3 leading-7 text-slate-300">SERVICE, clocks, UUIDs, random values, and cancellation enter through caller-supplied callbacks. The core never opens a connection.</p>
+        </article>
+        <article class="rounded-2xl border border-white/10 bg-white/[0.045] p-7 shadow-sm transition hover:-translate-y-0.5 hover:border-cyan-300/30 hover:bg-white/[0.075]">
+          <span class="font-mono text-sm text-cyan-200">04 / retain</span>
+          <h3 class="mt-5 text-xl font-semibold text-white">Results are owned</h3>
+          <p class="mt-3 leading-7 text-slate-300">Serialized SELECT and ASK results, plus graph results, stay valid after query parsing and dataset resources are released.</p>
+        </article>
+        <article class="rounded-2xl border border-white/10 bg-white/[0.045] p-7 shadow-sm transition hover:-translate-y-0.5 hover:border-cyan-300/30 hover:bg-white/[0.075]">
+          <span class="font-mono text-sm text-cyan-200">05 / plan</span>
+          <h3 class="mt-5 text-xl font-semibold text-white">Planning is observable</h3>
+          <p class="mt-3 leading-7 text-slate-300">An opt-in deterministic BGP ordering heuristic and caller-owned execution statistics keep query work inspectable.</p>
+        </article>
+        <article class="rounded-2xl border border-white/10 bg-white/[0.045] p-7 shadow-sm transition hover:-translate-y-0.5 hover:border-cyan-300/30 hover:bg-white/[0.075]">
+          <span class="font-mono text-sm text-cyan-200">06 / prove</span>
+          <h3 class="mt-5 text-xl font-semibold text-white">Claims have evidence</h3>
+          <p class="mt-3 leading-7 text-slate-300">Pinned W3C fixtures, local policy gates, property tests, fuzzing, and cross-platform CI keep scope honest and reviewable.</p>
+        </article>
+      </div>
+    </section>
+
+    <section id="surface" class="border-y border-white/10 bg-slate-900/60">
+      <div class="mx-auto grid max-w-7xl gap-12 px-6 py-24 lg:grid-cols-2 lg:px-8 lg:py-28">
+        <div>
+          <p class="font-mono text-xs font-semibold uppercase tracking-[0.22em] text-cyan-200">SPARQL 1.1 Query</p>
+          <h2 class="mt-4 text-3xl font-semibold tracking-tight text-white sm:text-4xl">The language where it belongs. The policy where you need it.</h2>
+          <p class="mt-6 max-w-xl text-lg leading-8 text-slate-300">The public surface concentrates on the SPARQL 1.1 Query Language. `FROM` and `FROM NAMED` only restrict graphs already offered by the View; they never fetch a resource or presume a graph store.</p>
+          <a href="https://www.w3.org/TR/sparql11-query/" class="mt-8 inline-flex text-sm font-semibold text-cyan-200 transition hover:text-cyan-100">Read the SPARQL 1.1 Query recommendation →</a>
+        </div>
+        <div class="grid gap-4 sm:grid-cols-2">
+          <div class="rounded-2xl border border-cyan-300/20 bg-cyan-300/[0.07] p-6 shadow-sm">
+            <p class="font-mono text-xs uppercase tracking-wider text-cyan-200">Included</p>
+            <ul class="mt-5 space-y-3 text-sm leading-6 text-slate-200">
+              <li>Complete SPARQL 1.1 Query syntax gate</li>
+              <li>SELECT, ASK, CONSTRUCT, and concise-policy DESCRIBE</li>
+              <li>BGP, OPTIONAL, UNION, MINUS, GRAPH, VALUES, FILTER, and BIND</li>
+              <li>Subqueries, grouping, aggregates, expressions, and modifiers</li>
+              <li>Property paths and explicit SERVICE callbacks</li>
+              <li>SPARQL Results JSON/XML/CSV/TSV and graph writers</li>
+            </ul>
+          </div>
+          <div class="rounded-2xl border border-white/10 bg-white/[0.035] p-6">
+            <p class="font-mono text-xs uppercase tracking-wider text-slate-400">Deliberately separate</p>
+            <ul class="mt-5 space-y-3 text-sm leading-6 text-slate-300">
+              <li>SPARQL Update and Graph Store Protocol</li>
+              <li>SPARQL Protocol or HTTP endpoints</li>
+              <li>Automatic remote loading and authentication</li>
+              <li>Graph or dataset storage</li>
+              <li>RDFS, OWL, or other entailment regimes</li>
+              <li>SPARQL 1.2 evaluation claims</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="quickstart" class="mx-auto max-w-7xl px-6 py-24 lg:px-8 lg:py-32">
+      <div class="grid gap-14 lg:grid-cols-[.78fr_1.22fr]">
+        <div>
+          <p class="font-mono text-xs font-semibold uppercase tracking-[0.22em] text-cyan-200">Quick start</p>
+          <h2 class="mt-4 text-3xl font-semibold tracking-tight text-white sm:text-4xl">Parse, supply data, execute.</h2>
+          <p class="mt-5 leading-7 text-slate-300">Point Odin's named `odin-rdf` collection at a sibling, vendored, or application-owned checkout. The minimal example builds a sealed Dataset, then writes SPARQL Results JSON.</p>
+          <div class="mt-8 flex flex-wrap gap-3">
+            <a href="https://github.com/crapthings/odin-sparql/blob/main/examples/minimal/main.odin" class="rounded-lg bg-cyan-300 px-4 py-2.5 text-sm font-semibold text-slate-950 transition hover:bg-cyan-200">Open minimal example</a>
+            <a href="https://github.com/crapthings/odin-sparql/tree/main/examples" class="rounded-lg border border-white/15 bg-white/5 px-4 py-2.5 text-sm font-semibold text-white transition hover:bg-white/10">Browse examples</a>
+          </div>
+        </div>
+        <div class="overflow-hidden rounded-2xl border border-white/15 bg-slate-900 shadow-xl shadow-black/25">
+          <div class="border-b border-white/10 px-5 py-3 font-mono text-xs text-slate-400">terminal</div>
+          <pre class="overflow-x-auto p-6 font-mono text-sm leading-7 text-slate-100"><code><span class="text-slate-400"># run the end-to-end public API example</span>
+<span class="text-amber-200">odin run</span> examples/minimal \
+  -collection:odin-rdf=../odin-rdf
+
+<span class="text-slate-400"># run the same path over application-owned storage</span>
+<span class="text-amber-200">odin run</span> examples/custom_view \
+  -collection:odin-rdf=../odin-rdf
+
+<span class="text-slate-400"># check the parser and engine</span>
+<span class="text-amber-200">odin check</span> sparql -no-entry-point \
+  -collection:odin-rdf=../odin-rdf
+<span class="text-amber-200">odin test</span> sparql \
+  -collection:odin-rdf=../odin-rdf
+<span class="text-amber-200">odin test</span> sparql/engine \
+  -collection:odin-rdf=../odin-rdf
+
+<span class="text-cyan-200">Expected example output:</span>
+{<span class="text-amber-200">"head"</span>:{<span class="text-amber-200">"vars"</span>:[<span class="text-amber-200">"name"</span>]},<span class="text-amber-200">"results"</span>:{...}}</code></pre>
+        </div>
+      </div>
+    </section>
+
+    <section id="evidence" class="border-y border-white/10 bg-white/[0.035]">
+      <div class="mx-auto max-w-7xl px-6 py-24 lg:px-8 lg:py-28">
+        <div class="max-w-2xl">
+          <p class="font-mono text-xs font-semibold uppercase tracking-[0.22em] text-cyan-200">Evidence before claims</p>
+          <h2 class="mt-4 text-3xl font-semibold tracking-tight text-white sm:text-4xl">Conformance is a ledger, not a badge.</h2>
+          <p class="mt-5 text-lg leading-8 text-slate-300">Syntax, evaluation, result serialization, and the implementation-defined DESCRIBE policy are documented separately. The complete record states what passes, what is intentionally excluded, and what remains future work.</p>
+        </div>
+        <div class="mt-12 grid gap-5 md:grid-cols-3">
+          <a href="https://github.com/crapthings/odin-sparql/blob/main/docs/conformance.md" class="rounded-2xl border border-white/10 bg-slate-950/55 p-7 transition hover:border-cyan-300/30 hover:bg-slate-950">
+            <p class="font-mono text-sm text-cyan-200">W3C syntax</p>
+            <p class="mt-4 text-3xl font-semibold text-white">63 + 31</p>
+            <p class="mt-2 text-sm leading-6 text-slate-400">Positive and negative pinned SPARQL 1.1 Query syntax entries.</p>
+          </a>
+          <a href="https://github.com/crapthings/odin-sparql/actions/workflows/ci.yml" class="rounded-2xl border border-white/10 bg-slate-950/55 p-7 transition hover:border-cyan-300/30 hover:bg-slate-950">
+            <p class="font-mono text-sm text-cyan-200">Cross-platform</p>
+            <p class="mt-4 text-3xl font-semibold text-white">3 OS</p>
+            <p class="mt-2 text-sm leading-6 text-slate-400">Linux, macOS, and Windows run the project's quality and test gates.</p>
+          </a>
+          <a href="https://github.com/crapthings/odin-sparql/blob/main/docs/releasing.md" class="rounded-2xl border border-white/10 bg-slate-950/55 p-7 transition hover:border-cyan-300/30 hover:bg-slate-950">
+            <p class="font-mono text-sm text-cyan-200">Release gate</p>
+            <p class="mt-4 text-3xl font-semibold text-white">Pinned</p>
+            <p class="mt-2 text-sm leading-6 text-slate-400">Strict checks, sanitizers, fuzzing, properties, and cached W3C fixtures.</p>
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <section class="mx-auto max-w-7xl px-6 py-24 lg:px-8 lg:py-32">
+      <div class="relative overflow-hidden rounded-3xl border border-cyan-300/25 bg-gradient-to-br from-cyan-300/15 via-slate-900 to-indigo-400/15 px-7 py-12 shadow-xl shadow-black/20 sm:px-12 lg:flex lg:items-center lg:justify-between lg:px-16 lg:py-16">
+        <div class="relative max-w-2xl">
+          <p class="font-mono text-xs font-semibold uppercase tracking-[0.22em] text-cyan-200">Start at the boundary</p>
+          <h2 class="mt-4 text-3xl font-semibold tracking-tight text-white sm:text-4xl">Use SPARQL without inheriting a database policy.</h2>
+          <p class="mt-5 text-lg leading-8 text-slate-300">Read the API contract, then choose the Dataset or custom View that fits your application.</p>
+        </div>
+        <div class="relative mt-8 flex shrink-0 flex-col gap-3 sm:flex-row lg:mt-0">
+          <a href="https://github.com/crapthings/odin-sparql" class="inline-flex items-center justify-center rounded-xl bg-cyan-300 px-5 py-3 text-sm font-semibold text-slate-950 transition hover:bg-cyan-200">Get the source</a>
+          <a href="https://github.com/crapthings/odin-sparql/blob/main/docs/architecture.md" class="inline-flex items-center justify-center rounded-xl border border-white/20 bg-white/5 px-5 py-3 text-sm font-semibold text-white transition hover:bg-white/10">Read architecture</a>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="border-t border-white/10">
+    <div class="mx-auto flex max-w-7xl flex-col gap-4 px-6 py-9 text-sm text-slate-400 sm:flex-row sm:items-center sm:justify-between lg:px-8">
+      <p><span class="font-semibold text-slate-200">odin-sparql</span> · Bounded SPARQL 1.1 Query for Odin.</p>
+      <div class="flex gap-5">
+        <a href="https://github.com/crapthings/odin-sparql/blob/main/LICENSE" class="transition hover:text-white">MIT License</a>
+        <a href="https://github.com/crapthings/odin-sparql" class="transition hover:text-white">GitHub</a>
+      </div>
+    </div>
+  </footer>
+</body>
+</html>
