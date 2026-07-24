@@ -4,6 +4,13 @@ This project follows [Semantic Versioning](https://semver.org/).
 
 ## Unreleased
 
+## 0.1.1 - 2026-07-24
+
+- Publish a documentation-only pre-1.0 patch that aligns the generated Pages
+  site with the Odin RDF visual palette. Query parsing, Dataset behavior,
+  execution semantics, public APIs, and compatibility expectations are
+  unchanged from `0.1.0`.
+
 ## 0.1.0 - 2026-07-24
 
 - First public release of the bounded, dataset-agnostic SPARQL 1.1 Query
