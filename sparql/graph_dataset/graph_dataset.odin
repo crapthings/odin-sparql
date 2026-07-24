@@ -20,8 +20,10 @@ Options :: struct {
 // SPARQL Dataset View. It remains useful for adapter-focused tests; the main
 // Memory_Dataset uses the same Graph kernel directly.
 Dataset :: struct {
-	storage: graph.Graph,
-	adapter: graph_sparql.View,
+	storage:      graph.Graph,
+	adapter:      graph_sparql.View,
+	sealed:       bool,
+	freeze_error: graph.Error,
 }
 
 @(private) map_error :: proc(error: graph.Error) -> dataset.Error_Code {
@@ -34,7 +36,7 @@ Dataset :: struct {
 	case .Lexical_Limit:   return .Lexical_Limit
 	case .Invalid_View:    return .Invalid_View
 	case .Invalid_Sink:    return .Invalid_Sink
-	case .Term_Limit, .Out_Of_Memory: return .Out_Of_Memory
+	case .Term_Limit, .Invalid_Derivation, .Out_Of_Memory: return .Out_Of_Memory
 	}
 	return .Out_Of_Memory
 }
@@ -55,6 +57,7 @@ destroy :: proc(target: ^Dataset) {
 
 // add copies one RDF quad into the graph-backed set.
 add :: proc(target: ^Dataset, value: rdf.Quad) -> dataset.Error_Code {
+	if target.sealed do return .Sealed
 	return map_error(graph.add(&target.storage, value))
 }
 
@@ -70,6 +73,7 @@ triple_sink :: proc(triple: rdf.Triple, user_data: rawptr) -> bool {
 // add_collector copies retained collector values into the graph set. It follows
 // Memory_Dataset's existing partial-ingestion behavior on a later failure.
 add_collector :: proc(target: ^Dataset, collector: ^rdf_dataset.Collector) -> dataset.Error_Code {
+	if target.sealed do return .Sealed
 	for quad in collector.quads {
 		if error := add(target, quad); error != .None do return error
 	}
@@ -77,12 +81,20 @@ add_collector :: proc(target: ^Dataset, collector: ^rdf_dataset.Collector) -> da
 }
 
 // seal freezes the graph. Repeated calls are successful and do not copy values.
-seal :: proc(target: ^Dataset) { _ = graph.freeze(&target.storage) }
+// The API predates fallible index construction, so a freeze allocation failure
+// is retained and reported by view while mutation remains permanently sealed.
+seal :: proc(target: ^Dataset) {
+	if target.sealed do return
+	target.freeze_error = graph.freeze(&target.storage)
+	target.sealed = true
+}
 
 quad_count :: proc(target: ^Dataset) -> int { return graph.quad_count(&target.storage) }
 
 // view returns a public SPARQL Dataset view after seal.
 view :: proc(target: ^Dataset) -> (dataset.View, dataset.Error_Code) {
+	if !target.sealed do return {}, .Sealed
+	if target.freeze_error != .None do return {}, map_error(target.freeze_error)
 	if error := graph_sparql.init(&target.adapter, &target.storage); error != .None do return {}, map_error(error)
 	return graph_sparql.dataset_view(&target.adapter), .None
 }
