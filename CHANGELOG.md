@@ -4,6 +4,12 @@ This project follows [Semantic Versioning](https://semver.org/).
 
 ## Unreleased
 
+## 0.1.2 - 2026-07-24
+
+- Add release-gated `Memory_Dataset` regressions for blank-node scope,
+  case-folded language-tag identity, set deduplication, and scoped scans. No
+  public API or query-execution behavior changes.
+
 ## 0.1.1 - 2026-07-24
 
 - Publish a documentation-only pre-1.0 patch that aligns the generated Pages
