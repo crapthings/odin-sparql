@@ -5,7 +5,7 @@ root=$(CDPATH= cd -- "$(dirname -- "$0")/.." && pwd)
 ci="$root/.github/workflows/ci.yml"
 guide="$root/docs/releasing.md"
 verify="$root/scripts/verify-release.sh"
-rdf_revision='20f339d1977f14a99ed7962f547db27ba22ae512'
+rdf_revision='a4024ddec94fbdcd810631206752d87c5595120f'
 w3c_revision='d3e844aaa3e2f2b5250f2d1c988ce58870d6bc86'
 
 fail() {
@@ -14,9 +14,9 @@ fail() {
 }
 
 grep -Fq -- "$rdf_revision" "$ci" || fail "CI odin-rdf revision is missing"
-grep -Fq -- "v0.31.0" "$ci" || fail "CI odin-rdf release marker is missing"
+grep -Fq -- "development convergence baseline" "$ci" || fail "CI odin-rdf development marker is missing"
 grep -Fq -- "$rdf_revision" "$guide" || fail "release guide odin-rdf revision is missing"
-grep -Fq -- "v0.31.0" "$guide" || fail "release guide odin-rdf release marker is missing"
+grep -Fq -- "development convergence baseline" "$guide" || fail "release guide odin-rdf development marker is missing"
 grep -Fq -- "$w3c_revision" "$guide" || fail "release guide W3C revision is missing"
 grep -Fq -- "$w3c_revision" "$verify" || fail "offline verifier W3C revision is missing"
 grep -Fq -- 'sh "$root/scripts/check-release-facts.sh"' "$verify" || fail "offline verifier does not check release facts"

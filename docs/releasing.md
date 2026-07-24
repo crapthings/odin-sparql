@@ -29,8 +29,8 @@ evidence, but does not itself silently freeze an API.
 Before verification, select and record:
 
 - the intended `odin-sparql` revision and whether the worktree is clean;
-- the released `odin-rdf` revision used by the tag (CI currently pins
-  `20f339d1977f14a99ed7962f547db27ba22ae512`, `v0.31.0`);
+- the exact `odin-rdf` revision used by the candidate (CI currently pins
+  `a4024ddec94fbdcd810631206752d87c5595120f`, the development convergence baseline);
 - the Odin compiler version and target platform; and
 - the W3C `w3c/rdf-tests` revision
   `d3e844aaa3e2f2b5250f2d1c988ce58870d6bc86` already present on disk.

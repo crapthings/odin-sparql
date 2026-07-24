@@ -37,7 +37,7 @@ run_case "$optional/q-opt-2.rq" "$optional/data.ttl" "$optional/result-opt-2.ttl
 run_case "$optional/q-opt-3.rq" "$optional/data.ttl" "$optional/result-opt-3.ttl"
 run_case "$optional/q-opt-complex-1.rq" "$optional/complex-data-1.ttl" "$optional/result-opt-complex-1.ttl"
 optional_base="http://www.w3.org/2001/sw/DataAccess/tests/data-r2/optional/"
-for name in 2 3
+for name in 2 3 4
 do
 	run_mixed_case "$optional/q-opt-complex-$name.rq" "$optional/result-opt-complex-$name.ttl" "$optional_base" \
 	  "$optional_base"complex-data-2.ttl "$optional/complex-data-2.ttl" \
@@ -174,5 +174,5 @@ if ! "$runner" --named "$dataset/dataset-12b.rq" "$dataset/dataset-12.ttl" "$dat
 fi
 
 printf '%s\n' "W3C SPARQL M3 graph-pattern subset: total=$total failed=$failed"
-[ "$total" -eq 50 ]
+[ "$total" -eq 51 ]
 [ "$failed" -eq 0 ]

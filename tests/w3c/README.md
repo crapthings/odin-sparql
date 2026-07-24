@@ -134,8 +134,8 @@ For offline verification, set `W3C_VALUES_SUITE` to an already-cached
 
 ## M3 graph-pattern evaluation
 
-`scripts/run-w3c-m3-pattern-tests.sh` runs fifty pinned evaluation
-entries: six SPARQL 1.0 OPTIONAL/UNION cases (including nested complex
+`scripts/run-w3c-m3-pattern-tests.sh` runs fifty-one pinned evaluation
+entries: seven SPARQL 1.0 OPTIONAL/UNION cases (including nested complex
 OPTIONAL), all seventeen SPARQL 1.0 GRAPH cases, three SPARQL 1.0 FILTER equality cases,
 two SPARQL 1.1 MINUS cases, and ten SPARQL 1.1 BIND/scope cases, plus
 the complete twelve-entry SPARQL 1.0 Dataset manifest. It uses the same multiset
@@ -290,14 +290,13 @@ sh scripts/run-w3c-m4-regex-tests.sh
 For offline verification, set `W3C_M4_REGEX_SUITE` to the cached
 `sparql/sparql10/regex` directory.
 
-`scripts/run-w3c-m4-builtin-tests.sh` runs twenty-four `sameTerm`, `STR`,
-`LANG`, `DATATYPE`, `isBlank`, `isIRI`, `isURI`, and `langMatches` entries
+`scripts/run-w3c-m4-builtin-tests.sh` runs twenty-five `sameTerm`, `STR`,
+`LANG`, `DATATYPE`, `isBlank`, `isLiteral`, `isIRI`, `isURI`, and `langMatches` entries
 from the SPARQL 1.0 `expr-builtin` manifest, including case-insensitive
 language tags and boolean keywords. The shared result comparator handles
 document-local blank-node identifiers through a one-to-one mapping.
-`isLiteral` remains an engine-unit-covered feature until the pinned `odin-rdf`
-Turtle reader accepts its official result fixture's trailing semicolon in a
-nested property list.
+`isLiteral` is also executed through its official Turtle result fixture,
+including its trailing semicolon in a nested property list.
 
 ```sh
 sh scripts/run-w3c-m4-builtin-tests.sh

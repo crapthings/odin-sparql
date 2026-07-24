@@ -53,9 +53,9 @@ The in-progress M3 evaluator passes the eight `values01` through `values08`
 entries from the pinned SPARQL 1.1 `bindings` manifest. The gate covers inline
 and trailing `VALUES`, multi-column rows, `UNDEF`, joins, and one `OPTIONAL`
 interaction through Turtle-loaded default-graph data and unordered SRX result
-multiset comparison. A second M3 gate passes six SPARQL 1.0 OPTIONAL/UNION
+multiset comparison. A second M3 gate passes seven SPARQL 1.0 OPTIONAL/UNION
 entries (`q-opt-1` through `q-opt-3` and `q-opt-complex-1` through
-`q-opt-complex-3`) and two SPARQL 1.1
+`q-opt-complex-4`) and two SPARQL 1.1
 MINUS entries (`full-minuend`, `part-minuend`), comparing both SRX and standard
 RDF/Turtle result-set encodings. It additionally covers BIND arithmetic,
 joins, filtering, UNION, error, and scope behavior in `bind01` through
@@ -69,10 +69,6 @@ OPTIONAL. It also passes three FILTER equality cases (`query-eq-3` through
 covering `FROM`, `FROM NAMED`, default-graph merging, named-graph restriction
 against application-provided graphs, blank-node scope across duplicate graph
 sources, and multi-source default/named graph composition.
-`q-opt-complex-4` remains outside the gate because its official expected Turtle
-uses a trailing semicolon in a nested blank property list that the pinned
-`odin-rdf` Turtle reader rejects; this is an upstream RDF-reader compatibility
-gap, not a rewritten test fixture.
 
 The separate M3 Algebra gate passes all fourteen entries from the pinned
 SPARQL 1.0 `algebra` manifest. It verifies nested OPTIONAL evaluation,
@@ -121,17 +117,14 @@ The four historic mixed-type arithmetic fixtures retain their original
 integral-`xsd:decimal` result spellings; their gate compares only `6` and
 `6.0`-style integral decimal spellings by value, while all other RDF terms and
 all non-integral decimals remain exact.
-The M4 built-in gate passes twenty-four entries from the pinned SPARQL 1.0
+The M4 built-in gate passes twenty-five entries from the pinned SPARQL 1.0
 `expr-builtin` manifest: all three `sameTerm`, four `STR`, all three `LANG`,
-three `DATATYPE`, one each for `isBlank`, `isIRI`, and `isURI`, five
+three `DATATYPE`, one each for `isBlank`, `isLiteral`, `isIRI`, and `isURI`, five
 `langMatches` cases, case-insensitive language-tag equality/inequality, and
 case-insensitive boolean keyword canonicalization. Its result
 comparator performs a one-to-one mapping for blank nodes from the two result
-documents. `isLiteral` has engine unit coverage but is not yet a W3C gate:
-its official Turtle result fixture uses a trailing semicolon in a nested blank
-property list, which the pinned `odin-rdf` Turtle reader currently rejects.
-This is tracked as an upstream RDF-reader compatibility gap rather than being
-silently rewritten by the SPARQL test runner.
+documents. `isLiteral` is covered through its official Turtle result fixture,
+including a trailing semicolon in a nested blank-property list.
 
 The M4 open-world gate passes eighteen direct-comparison entries from the
 pinned SPARQL 1.0 `open-world` manifest: `open-eq-01` through `open-eq-12`,

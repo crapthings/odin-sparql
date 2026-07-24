@@ -17,20 +17,21 @@ odin build "$root/tests/w3c/basic_runner" -out:"$runner" -collection:odin-rdf="$
 
 total=0
 failed=0
-for name in sameTerm sameTerm-eq sameTerm-not-eq str-1 str-2 str-3 str-4 lang-1 lang-2 lang-3 datatype-1 datatype-2 datatype-3 blank-1 iri-1 uri-1 langMatches-1 langMatches-2 langMatches-3 langMatches-4 langMatches-de-de lang-case-insensitive-eq lang-case-insensitive-ne case-insensitive-booleans
+for name in sameTerm sameTerm-eq sameTerm-not-eq str-1 str-2 str-3 str-4 lang-1 lang-2 lang-3 datatype-1 datatype-2 datatype-3 blank-1 isliteral-1 iri-1 uri-1 langMatches-1 langMatches-2 langMatches-3 langMatches-4 langMatches-de-de lang-case-insensitive-eq lang-case-insensitive-ne case-insensitive-booleans
 do
   total=$((total + 1))
   query="$suite/$name.rq"
   data="$suite/data-builtin-1.ttl"
   result="$suite/result-$name.ttl"
   case "$name" in
-    str-*|blank-*|iri-*|uri-*|langMatches-*) query="$suite/q-$name.rq" ;;
+	str-*|blank-*|iri-*|uri-*|langMatches-*) query="$suite/q-$name.rq" ;;
 	lang-*) query="$suite/q-$name.rq"; data="$suite/data-builtin-2.ttl"; result="$suite/result-$name.srx" ;;
-	datatype-*) query="$suite/q-$name.rq"; data="$suite/data-builtin-2.ttl"; result="$suite/result-$name.srx" ;;
+	datatype-*|isliteral-*) query="$suite/q-$name.rq"; data="$suite/data-builtin-2.ttl"; result="$suite/result-$name.srx" ;;
   esac
   case "$name" in
     str-*) result="$suite/result-$name.ttl" ;;
-    datatype-1) data="$suite/data-builtin-1.ttl"; result="$suite/result-$name.ttl" ;;
+	datatype-1) data="$suite/data-builtin-1.ttl"; result="$suite/result-$name.ttl" ;;
+	isliteral-1) result="$suite/result-$name.ttl" ;;
     langMatches-de-de) data="$suite/data-langMatches-de.ttl"; result="$suite/result-langMatches-de.ttl" ;;
 	langMatches-*) data="$suite/data-langMatches.ttl" ;;
 	lang-case-insensitive-eq) query="$suite/lang-case-sensitivity-eq.rq"; data="$suite/lang-case-sensitivity.ttl"; result="$suite/lang-case-insensitive-eq.srx" ;;
@@ -47,5 +48,5 @@ do
 done
 
 printf '%s\n' "W3C SPARQL M4 builtin subset: total=$total failed=$failed"
-[ "$total" -eq 24 ]
+[ "$total" -eq 25 ]
 [ "$failed" -eq 0 ]
