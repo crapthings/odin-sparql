@@ -132,6 +132,48 @@ test_memory_dataset_scans_specific_and_any_named_graphs :: proc(t: ^testing.T) {
 }
 
 @(test)
+test_memory_dataset_preserves_blank_node_scope_and_folds_language_identity :: proc(t: ^testing.T) {
+	store: dataset.Memory_Dataset
+	dataset.init(&store)
+	defer dataset.destroy(&store)
+
+	first_scope := rdf.new_blank_node_scope()
+	second_scope := rdf.new_blank_node_scope()
+	predicate := rdf.iri("urn:label")
+	first := rdf.default_graph_quad(rdf.Triple{
+		subject = rdf.blank_node("same", first_scope),
+		predicate = predicate,
+		object = rdf.language_literal("value", "EN"),
+	})
+	same_identity := rdf.default_graph_quad(rdf.Triple{
+		subject = rdf.blank_node("same", first_scope),
+		predicate = predicate,
+		object = rdf.language_literal("value", "en"),
+	})
+	second := rdf.default_graph_quad(rdf.Triple{
+		subject = rdf.blank_node("same", second_scope),
+		predicate = predicate,
+		object = rdf.language_literal("value", "en"),
+	})
+	testing.expect_value(t, dataset.add(&store, first), dataset.Error_Code.None)
+	testing.expect_value(t, dataset.add(&store, same_identity), dataset.Error_Code.None)
+	testing.expect_value(t, dataset.add(&store, second), dataset.Error_Code.None)
+	testing.expect_value(t, dataset.quad_count(&store), 2)
+
+	dataset.seal(&store)
+	view, view_error := dataset.view(&store)
+	testing.expect_value(t, view_error, dataset.Error_Code.None)
+	first_matches := Scan_State{}
+	first_pattern := dataset.Quad_Pattern{Has_Subject = true, Subject = rdf.blank_node("same", first_scope)}
+	testing.expect_value(t, dataset.scan(view, first_pattern, count_sink, &first_matches), dataset.Error_Code.None)
+	testing.expect_value(t, first_matches.count, 1)
+	second_matches := Scan_State{}
+	second_pattern := dataset.Quad_Pattern{Has_Subject = true, Subject = rdf.blank_node("same", second_scope)}
+	testing.expect_value(t, dataset.scan(view, second_pattern, count_sink, &second_matches), dataset.Error_Code.None)
+	testing.expect_value(t, second_matches.count, 1)
+}
+
+@(test)
 test_memory_dataset_scan_honors_sink_cancellation :: proc(t: ^testing.T) {
 	store: dataset.Memory_Dataset
 	dataset.init(&store)
