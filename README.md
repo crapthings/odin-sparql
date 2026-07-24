@@ -153,10 +153,13 @@ odin run examples/minimal -collection:odin-rdf=../odin-rdf
 odin run examples/custom_view -collection:odin-rdf=../odin-rdf
 ```
 
-The full release gate adds strict checks, sanitizers, property/fuzz coverage,
-and the pinned W3C suites. Follow the [release guide](docs/releasing.md), then
-run `sh scripts/verify-release.sh`; it requires local `odin-rdf` and already
-cached pinned W3C fixtures, and never downloads them during verification.
+The full development-conformance gate adds strict checks, sanitizers,
+property/fuzz coverage, and the pinned W3C suites. Run
+`sh scripts/verify-release.sh`; it requires local `odin-rdf` and already
+cached pinned W3C fixtures, and never downloads them during verification. Its
+success is current development evidence, not a publication step; the
+[release guide](docs/releasing.md) applies only when a future release is
+explicitly proposed.
 
 ## Contributing and security
 

@@ -2,8 +2,8 @@
 
 `odin-sparql` will claim only capabilities exercised by a pinned revision of
 the official W3C RDF and SPARQL test repository. The suite is a test input, not
-a production dependency, and release verification must not fetch it from the
-network.
+a production dependency, and development conformance verification must not
+fetch it from the network.
 
 ## Current state
 

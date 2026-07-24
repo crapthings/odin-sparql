@@ -15,7 +15,7 @@ if [ ! -d "$odin_graph" ]; then
   exit 2
 fi
 if [ ! -f "$w3c_root/sparql/sparql11/syntax-query/manifest.ttl" ]; then
-  printf '%s\n' 'W3C_TEST_ROOT must name the pinned w3c/rdf-tests checkout; release verification never downloads fixtures' >&2
+  printf '%s\n' 'W3C_TEST_ROOT must name the pinned w3c/rdf-tests checkout; development conformance verification never downloads fixtures' >&2
   exit 2
 fi
 
@@ -38,11 +38,11 @@ odin test "$root/sparql/eval" -collection:odin-rdf="$odin_rdf" -collection:odin-
 odin test "$root/sparql/engine" -collection:odin-rdf="$odin_rdf" -collection:odin-graph="$odin_graph"
 # The evaluator and public engine contain the result-lifetime boundaries for
 # grouping, ordering, and result materialization. Keep a focused sanitizer
-# pass in the offline release evidence; CI still provides the full matrix.
+# pass in the offline development evidence; CI still provides the full matrix.
 odin test "$root/sparql/eval" -sanitize:address -collection:odin-rdf="$odin_rdf" -collection:odin-graph="$odin_graph"
 odin test "$root/sparql/engine" -sanitize:address -collection:odin-rdf="$odin_rdf" -collection:odin-graph="$odin_graph"
 # Optimized execution uses different temporary-allocation lifetimes. Keep the
-# default NOW() ownership regression in the release evidence as well.
+# default NOW() ownership regression in the development evidence as well.
 odin test "$root/sparql/engine" -o:speed -collection:odin-rdf="$odin_rdf" -collection:odin-graph="$odin_graph"
 odin test "$root/tests/public_parser" -collection:odin-rdf="$odin_rdf" -collection:odin-graph="$odin_graph"
 odin test "$root/tests/public_engine" -collection:odin-rdf="$odin_rdf" -collection:odin-graph="$odin_graph"
@@ -108,4 +108,4 @@ ODIN_RDF_COLLECTION="$odin_rdf" ODIN_GRAPH_COLLECTION="$odin_graph" sh "$root/sc
 ODIN_RDF_COLLECTION="$odin_rdf" ODIN_GRAPH_COLLECTION="$odin_graph" sh "$root/scripts/run-m6-graph-result-tests.sh"
 ODIN_RDF_COLLECTION="$odin_rdf" ODIN_GRAPH_COLLECTION="$odin_graph" W3C_M7_SERVICE_SUITE="$w3c_root/sparql/sparql11/service" sh "$root/scripts/run-w3c-m7-service-tests.sh"
 
-printf '%s\n' 'offline release verification completed'
+printf '%s\n' 'offline development conformance verification completed'
