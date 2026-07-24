@@ -137,14 +137,12 @@ through `date-4`): valid calendar/timezone lexical forms, timezone-absence
 behavior in equality, date relations, and `DATATYPE`. This is not a general
 temporal claim: temporal ordering and other date/time casts remain deferred.
 
-The M4 regex gate passes seventeen SPARQL 1.0 `regex` manifest entries with
-SRX results. It covers quantifiers, character classes, anchors, the `i`, `m`,
-`s`, `x`, and manifest-specific `q` flags, and default-dot versus dot-all
-newline behavior. The four historic `regex-query-001` through
-`regex-query-004` cases are not counted in that gate: their expected results
-are Turtle result sets rejected by the pinned `odin-rdf` Turtle reader for the
-same trailing-semicolon form recorded above. They are not rewritten or claimed
-as passing tests.
+The M4 regex gate passes twenty-one SPARQL 1.0 `regex` manifest entries. It
+covers quantifiers, character classes, anchors, the `i`, `m`, `s`, `x`, and
+manifest-specific `q` flags, default-dot versus dot-all newline behavior, and
+the four historic `regex-query-001` through `regex-query-004` vectors with
+official Turtle result sets. The latter retain their original trailing-
+semicolon blank-property-list syntax.
 
 The M4 core-function gate passes `in01`, `in02`, `notin01`, `isnumeric01`,
 `if01`, `if02`, the empty-argument error case for `COALESCE`, and the four `CONCAT`

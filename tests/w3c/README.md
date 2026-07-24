@@ -277,11 +277,10 @@ sh scripts/run-w3c-m4-arithmetic-tests.sh
 For offline verification, set `W3C_M4_ARITHMETIC_SUITE` to the cached
 `sparql/sparql10/expr-ops` directory.
 
-`scripts/run-w3c-m4-regex-tests.sh` runs seventeen SRX-result entries from the
-pinned SPARQL 1.0 `regex` manifest. It covers quantifiers, character classes,
-anchors, and the `i`, `m`, `s`, `x`, and `q` flags. The four historic Turtle
-result-set entries are tracked as an `odin-rdf` Turtle-reader compatibility
-exclusion in `docs/conformance.md`.
+`scripts/run-w3c-m4-regex-tests.sh` runs twenty-one entries from the pinned
+SPARQL 1.0 `regex` manifest. It covers quantifiers, character classes,
+anchors, and the `i`, `m`, `s`, `x`, and `q` flags, including four historic
+Turtle result-set entries with trailing-semicolon blank-property lists.
 
 ```sh
 sh scripts/run-w3c-m4-regex-tests.sh

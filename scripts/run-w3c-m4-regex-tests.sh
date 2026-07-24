@@ -46,6 +46,14 @@ do
   fi
 done
 
+for number in 001 002 003 004
+do
+  total=$((total + 1))
+  if ! "$runner" "$suite/regex-query-$number.rq" "$suite/regex-data-01.ttl" "$suite/regex-result-$number.ttl"; then
+    failed=$((failed + 1))
+  fi
+done
+
 printf '%s\n' "W3C SPARQL M4 regex subset: total=$total failed=$failed"
-[ "$total" -eq 17 ]
+[ "$total" -eq 21 ]
 [ "$failed" -eq 0 ]
