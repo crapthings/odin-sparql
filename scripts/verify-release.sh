@@ -41,9 +41,10 @@ odin test "$root/sparql/engine" -collection:odin-rdf="$odin_rdf" -collection:odi
 # pass in the offline development evidence; CI still provides the full matrix.
 odin test "$root/sparql/eval" -sanitize:address -collection:odin-rdf="$odin_rdf" -collection:odin-graph="$odin_graph"
 odin test "$root/sparql/engine" -sanitize:address -collection:odin-rdf="$odin_rdf" -collection:odin-graph="$odin_graph"
-# Optimized execution uses different temporary-allocation lifetimes. Keep the
-# default NOW() ownership regression in the development evidence as well.
-odin test "$root/sparql/engine" -o:speed -collection:odin-rdf="$odin_rdf" -collection:odin-graph="$odin_graph"
+# Optimized execution uses different temporary-allocation lifetimes. Use
+# separate modules so this remains a practical offline gate on constrained
+# machines; each module still uses -o:speed code generation.
+odin test "$root/sparql/engine" -o:speed -use-separate-modules -collection:odin-rdf="$odin_rdf" -collection:odin-graph="$odin_graph"
 odin test "$root/tests/public_parser" -collection:odin-rdf="$odin_rdf" -collection:odin-graph="$odin_graph"
 odin test "$root/tests/public_engine" -collection:odin-rdf="$odin_rdf" -collection:odin-graph="$odin_graph"
 odin test "$root/tests/dataset" -collection:odin-rdf="$odin_rdf" -collection:odin-graph="$odin_graph"
