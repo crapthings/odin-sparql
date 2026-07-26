@@ -4,6 +4,13 @@ This project follows [Semantic Versioning](https://semver.org/).
 
 ## Unreleased
 
+- Restore `sparql/dataset.Memory_Dataset` as a self-contained, bounded RDF
+  Dataset implementation that depends only on `odin-rdf`. Its public API and
+  observable set, ownership, lifecycle, graph-scope, and limit semantics are
+  unchanged; sealed built-in scans now use deterministic insertion order rather
+  than Graph indexes. `sparql/graph_dataset` remains an optional adapter and
+  contract-test surface, not a core release dependency.
+
 ## 0.2.0 - 2026-07-24
 
 - Add the optional `sparql/graph_dataset` public package. It provides the

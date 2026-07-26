@@ -3,7 +3,6 @@ set -eu
 
 root=$(CDPATH= cd -- "$(dirname -- "$0")/.." && pwd)
 odin_rdf=${ODIN_RDF_COLLECTION:-"$root/../odin-rdf"}
-odin_graph=${ODIN_GRAPH_COLLECTION:-"$root/../odin-graph"}
 fixtures="$root/tests/graph_results"
 runner="$root/.cache/odin-sparql-basic-runner"
 
@@ -12,7 +11,7 @@ if [ ! -d "$odin_rdf" ]; then
   exit 2
 fi
 
-odin build "$root/tests/w3c/basic_runner" -out:"$runner" -collection:odin-rdf="$odin_rdf" -collection:odin-graph="$odin_graph"
+odin build "$root/tests/w3c/basic_runner" -out:"$runner" -collection:odin-rdf="$odin_rdf"
 
 total=0
 failed=0

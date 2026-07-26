@@ -3,7 +3,6 @@ set -eu
 
 root=$(CDPATH= cd -- "$(dirname -- "$0")/.." && pwd)
 odin_rdf=${ODIN_RDF_COLLECTION:-"$root/../odin-rdf"}
-odin_graph=${ODIN_GRAPH_COLLECTION:-"$root/../odin-graph"}
 runs=${BENCH_RUNS:-3}
 records=${BENCH_RECORDS:-1000}
 rounds=${BENCH_ROUNDS:-3}
@@ -24,6 +23,6 @@ printf 'configuration: runs=%s records=%s rounds=%s optimization=speed\n' "$runs
 run=1
 while [ "$run" -le "$runs" ]; do
   printf '\nBGP planning process %s/%s\n' "$run" "$runs"
-  odin run "$root/benchmarks/bgp" -o:speed -define:BENCH_RECORDS="$records" -define:BENCH_ROUNDS="$rounds" -collection:odin-rdf="$odin_rdf" -collection:odin-graph="$odin_graph"
+  odin run "$root/benchmarks/bgp" -o:speed -define:BENCH_RECORDS="$records" -define:BENCH_ROUNDS="$rounds" -collection:odin-rdf="$odin_rdf"
   run=$((run + 1))
 done

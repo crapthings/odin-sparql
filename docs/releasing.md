@@ -35,6 +35,12 @@ Before verification, select and record:
 - the W3C `w3c/rdf-tests` revision
   `d3e844aaa3e2f2b5250f2d1c988ce58870d6bc86` already present on disk.
 
+The core release verifier intentionally has no `odin-graph` input:
+`sparql/dataset` is self-contained over `odin-rdf`. The optional
+`sparql/graph_dataset` adapter may be checked separately against a fixed Graph
+revision, but that integration never becomes undeclared evidence for a core
+SPARQL tag.
+
 Do not use a moving `odin-rdf` branch or a newly fetched W3C fixture as release
 evidence. A compatibility-tracking job may use those separately, but it cannot
 replace the pinned gate.

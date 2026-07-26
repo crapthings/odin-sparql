@@ -23,3 +23,9 @@ grep -Fq -- 'sh "$root/scripts/check-release-facts.sh"' "$verify" || fail "offli
 grep -Fq -- 'odin run "$root/examples/minimal"' "$verify" || fail "offline verifier does not run the public example"
 grep -Fq -- 'odin run "$root/examples/custom_view"' "$verify" || fail "offline verifier does not run the public custom View example"
 grep -Fq -- 'odin check "$root/sparql/dataset"' "$verify" || fail "offline verifier does not strictly check the Dataset API"
+if grep -Fq -- 'import graph "odin-graph:' "$root/sparql/dataset/dataset.odin"; then
+  fail "public Dataset must not import odin-graph"
+fi
+if grep -Fq -- 'odin-graph' "$verify"; then
+  fail "offline core verifier must not require odin-graph"
+fi

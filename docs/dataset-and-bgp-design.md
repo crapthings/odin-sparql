@@ -37,7 +37,7 @@ snapshot-state outcome.
 
 ## RDF set semantics and ownership
 
-`Memory_Dataset` owns cloned RDF term strings through its shared Graph storage
+`Memory_Dataset` owns cloned RDF term strings through its private bounded set
 and deduplicates equal default or named quads on insertion. It is intentionally
 unlike `odin-rdf`'s parser collector, which preserves source order and
 duplicate records. The graph mode is applied at scan time, so retained named
