@@ -30,6 +30,6 @@ BENCH_RUNS=1 BENCH_RECORDS=100 BENCH_ROUNDS=1 ./scripts/run-benchmarks.sh
 ```
 
 Compare the median of each process's best round only on the same machine,
-compiler, and configuration. `Memory_Dataset` freezes shared Graph indexes at
-seal time, so the benchmark measures the current indexed implementation while
-keeping the engine's BGP ordering policy explicit.
+compiler, and configuration. `Memory_Dataset` freezes its owned Dataset set at
+seal time; its scans preserve insertion order. The benchmark keeps the
+engine's BGP ordering policy explicit.

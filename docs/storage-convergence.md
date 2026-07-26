@@ -1,60 +1,34 @@
-# Shared storage contract
+# Dataset and Graph boundary
 
-This repository is still in development, so storage follows the specification
-and the executable conformance evidence rather than a legacy compatibility
-boundary. The ordering is:
+`sparql/dataset` is the released, self-contained Dataset boundary. Its
+`Memory_Dataset` owns copied RDF values and depends only on `odin-rdf`; it
+never imports, pins, or requires `odin-graph`. This keeps a SPARQL release
+reproducible without making an experimental Graph checkout part of the public
+runtime contract.
 
-1. Keep SPARQL behavior grounded in the pinned W3C conformance gates recorded
-   in [conformance.md](conformance.md).
-2. Keep RDFS Core and OWL RL behavior grounded in the Reasoner's documented
-   W3C vectors and rule-profile ledgers.
-3. Change storage ownership only when it preserves those observable semantics.
+The built-in Dataset provides bounded admission, RDF Dataset set semantics,
+borrowed sealed views, graph-scoped scans, and deterministic insertion order.
+It intentionally does not promise a particular index or storage engine.
+Applications that need a specialized index, persistence, synchronization, or
+resource policy provide `dataset.custom_view` instead.
 
-## Dataset agreement and implementation
+## Optional Graph adapter
 
-`sparql/graph_dataset/graph_dataset_test.odin` runs the same public Dataset
-operations through `Memory_Dataset` and the graph-backed Dataset. It proves
-agreement for:
+`sparql/graph_dataset` is an optional adapter package for experiments and
+integration tests. It wraps an owned `odin-graph:graph.Graph` in the same
+public `dataset.View` contract. It is not imported by `sparql`,
+`sparql/dataset`, the public examples, or the offline core release verifier.
 
-- invalid options, quad and lexical-byte admission limits, duplicate no-ops,
-  and unchanged cardinality after rejected writes;
-- owned lexical values, case-folded language-tag identity, and blank-node
-  scope identity;
-- sealing, borrowed views, default/named/any-named scans, and successful
-  early stop;
-- Collector ingestion and a public SPARQL `GRAPH` query over a named graph.
+Its contract tests compare the Graph-backed adapter with `Memory_Dataset` for
+admission limits, deduplication, copied lexical values, blank-node scope,
+sealing, graph modes, cancellation, Collector ingestion, and public-engine
+execution. Those tests protect adapter compatibility without promoting Graph
+to a required SPARQL dependency.
 
-Those comparisons established the observable contract before the implementation
-was changed. `Memory_Dataset` now owns one `odin-graph:graph.Graph` directly;
-it no longer retains a second quad slice or a second set of copied lexical
-strings. Its existing SPARQL API remains the boundary seen by parsers,
-evaluators, examples, and W3C runners.
+## Release consequence
 
-Graph builds immutable subject, predicate, object, graph, and two-term indexes
-when `Memory_Dataset.seal` freezes that shared store. Candidate scans preserve
-insertion order, so the optimization does not change SPARQL result order.
-
-## Remaining deliberate separation
-
-The SPARQL Dataset deliberately leaves Graph's distinct-term bound unexposed.
-More importantly, the Reasoner Store is not merely an RDF Dataset: it owns
-term IDs, transactional materialization state, and rule-oriented metadata.
-Its supported reasoning profiles are default-graph only.
-
-Replacing the Reasoner Store with Graph today would discard those properties.
-The graph reasoner adapter instead provides an explicit frozen closure copy,
-including asserted/inferred origin and first derivation supports. That is the
-current synchronization point between the two models, not a claim that their
-internal identities or transactions are interchangeable.
-
-## Ongoing evidence
-
-Every subsequent storage change must continue to pass:
-
-1. the affected SPARQL W3C query gates; and
-2. the applicable RDFS Core or OWL RL Reasoner profile gates, including
-   configured-limit rollback and provenance/index behavior where relevant.
-
-`sparql/graph_dataset` remains a focused adapter test surface. It is no longer
-the migration target: the main `Memory_Dataset` already uses the same Graph
-kernel.
+A post-v0.2 SPARQL release can be qualified with a fixed `odin-rdf` revision
+and the pinned W3C fixtures alone. If someone publishes or relies on the
+optional Graph adapter, that integration must name its own fixed Graph revision
+and validation evidence. It cannot silently become part of the core SPARQL
+release just because local development checkouts happen to agree.

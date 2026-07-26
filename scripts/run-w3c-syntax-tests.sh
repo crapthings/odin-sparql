@@ -3,7 +3,6 @@ set -eu
 
 root=$(CDPATH= cd -- "$(dirname -- "$0")/.." && pwd)
 odin_rdf=${ODIN_RDF_COLLECTION:-"$root/../odin-rdf"}
-odin_graph=${ODIN_GRAPH_COLLECTION:-"$root/../odin-graph"}
 if [ -n "${W3C_SYNTAX_SUITE:-}" ]; then
   suite=$W3C_SYNTAX_SUITE
 else
@@ -13,7 +12,7 @@ runner="$root/.cache/odin-sparql-syntax-runner"
 
 odin build "$root/tests/w3c/syntax_runner" \
   -out:"$runner" \
-  -collection:odin-rdf="$odin_rdf" -collection:odin-graph="$odin_graph"
+  -collection:odin-rdf="$odin_rdf"
 
 entries=$(awk '
   /rdf:type[[:space:]]+mf:PositiveSyntaxTest11/ { kind = "positive" }

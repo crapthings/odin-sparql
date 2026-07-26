@@ -104,7 +104,7 @@ are the source of truth for signatures, ownership, limits, and error behavior.
 | --- | --- | --- |
 | `sparql` | Parse owned queries, inspect diagnostics, and traverse the read-only source AST | [Parser API](docs/public-parser-api.md) |
 | `sparql/dataset` | Create sealed in-memory Datasets or expose an application-owned graph-scoped scan adapter | [Dataset API](docs/dataset-api.md) |
-| `sparql/graph_dataset` | Focused adapter test surface for the Graph-backed Dataset boundary | [Shared storage contract](docs/storage-convergence.md) |
+| `sparql/graph_dataset` | Optional Graph-backed adapter and contract-test surface; not a core release dependency | [Shared storage contract](docs/storage-convergence.md) |
 | `sparql/engine` | Execute a query with bounded options, callbacks, execution statistics, and owned results | [Query execution API](docs/query-execution-api.md) |
 | `sparql/results` | Serialize SELECT/ASK and graph results in the supported standard formats | [Graph-result and serialization design](docs/m6-graph-results-design.md) |
 

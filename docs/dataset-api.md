@@ -12,11 +12,13 @@ W3C gates and the tests in this repository.
 
 ## In-memory lifecycle
 
-`Memory_Dataset` presents SPARQL's Dataset API over one owned `odin-graph`
-store. Initialize it before use, add quads or a Collector snapshot, seal it,
-obtain a borrowed View, then destroy it when no scan or execution still uses
-that View. Applications that ingest untrusted or otherwise bounded data can
-use `init_with_options` with a distinct-quad limit:
+`Memory_Dataset` owns its own bounded RDF Dataset set. Its only library
+dependency is `odin-rdf`; it is intentionally independent of `odin-graph` so
+the public Dataset package can be released and used without an adjacent Graph
+checkout or Graph support promise. Initialize it before use, add quads or a
+Collector snapshot, seal it, obtain a borrowed View, then destroy it when no
+scan or execution still uses that View. Applications that ingest untrusted or
+otherwise bounded data can use `init_with_options` with a distinct-quad limit:
 
 ```odin
 store: dataset.Memory_Dataset
@@ -48,10 +50,11 @@ Dataset.
 `add` validates and copies every term string; callers may immediately reuse or
 destroy their input. Equal quads are accepted as no-ops, so `quad_count`
 reports RDF Dataset set cardinality across both default and named graphs.
-After `seal`, Graph builds immutable scan indexes; `add` and `add_collector`
-return `Sealed`, and `seal` itself is idempotent. `view` also returns `Sealed`
-before sealing. A View borrows its dataset and becomes invalid when its
-`Memory_Dataset` is destroyed.
+After `seal`, `add` and `add_collector` return `Sealed`, and `seal` itself is
+idempotent. `view` also returns `Sealed` before sealing. The built-in Dataset
+uses deterministic insertion-order scans; applications with a different index
+or scale requirement should provide a `custom_view`. A View borrows its
+dataset and becomes invalid when its `Memory_Dataset` is destroyed.
 
 `add_collector` is the explicit copying ingestion adapter from
 `odin-rdf:rdf/dataset.Collector`. It applies the same validation and set
