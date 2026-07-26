@@ -4,12 +4,24 @@ This project follows [Semantic Versioning](https://semver.org/).
 
 ## Unreleased
 
+## 0.7.0 - 2026-07-26
+
+- Publish the accumulated M3–M7 SPARQL Query capability set: graph patterns,
+  expressions and solution modifiers, subqueries/aggregates/property paths,
+  graph results and serializers, plus explicit SERVICE and execution-context
+  callbacks. Exact supported semantics remain the pinned W3C and local gates
+  recorded in `docs/conformance.md`; this is not a claim of complete SPARQL
+  1.1 evaluation conformance.
 - Restore `sparql/dataset.Memory_Dataset` as a self-contained, bounded RDF
   Dataset implementation that depends only on `odin-rdf`. Its public API and
   observable set, ownership, lifecycle, graph-scope, and limit semantics are
   unchanged; sealed built-in scans now use deterministic insertion order rather
   than Graph indexes. `sparql/graph_dataset` remains an optional adapter and
   contract-test surface, not a core release dependency.
+- Qualify the release with the fixed `odin-rdf` and W3C fixture revisions,
+  reproducible offline verification, sanitizer and optimized-engine checks,
+  deterministic fuzzing, and Linux/macOS/Windows CI. The optional Graph adapter
+  continues to receive a separate fixed-revision integration check.
 
 ## 0.2.0 - 2026-07-24
 

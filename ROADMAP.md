@@ -7,10 +7,10 @@ semantic and test gates pass. Dates are deliberately not release criteria.
 
 | Milestone | Status | Evidence boundary |
 | --- | --- | --- |
-| M0–M4 | Complete | Repository contract, Query parser/BGPs, graph patterns, expressions, and modifiers have their documented strict, sanitizer, and pinned W3C gates. |
-| M5 | Complete, pre-release `0.5.0` | Subqueries (7 W3C + 5 local final-VALUES cases), grouping/aggregates (38 W3C + 6 syntax + 6 grouping + 2 ownership cases), and property paths (35 W3C + 3 bounded-extension cases) run in offline release verification. |
-| M6 | Complete, pre-release `0.6.0` | CONSTRUCT, the documented concise DESCRIBE policy, graph ownership, and result serializers have independent offline gates; alternate DESCRIBE policies remain separate scope. |
-| M7 | Complete, pre-release `0.7.0` | SERVICE callbacks, planning statistics, and the custom-View adapter boundary are implemented; concrete storage adapters remain application-owned by design. |
+| M0–M4 | Complete, included in `v0.7.0` | Repository contract, Query parser/BGPs, graph patterns, expressions, and modifiers have their documented strict, sanitizer, and pinned W3C gates. |
+| M5 | Complete, included in `v0.7.0` | Subqueries (7 W3C + 5 local final-VALUES cases), grouping/aggregates (38 W3C + 6 syntax + 6 grouping + 2 ownership cases), and property paths (35 W3C + 3 bounded-extension cases) run in offline release verification. |
+| M6 | Complete, included in `v0.7.0` | CONSTRUCT, the documented concise DESCRIBE policy, graph ownership, and result serializers have independent offline gates; alternate DESCRIBE policies remain separate scope. |
+| M7 | Complete, released in `v0.7.0` | SERVICE callbacks, planning statistics, and the custom-View adapter boundary are implemented; concrete storage adapters remain application-owned by design. |
 | M8 | Ongoing hardening | Fuzz/property/sanitizer/benchmark/release evidence is in place; new capability claims must add independent gates. |
 | M9 | Deliberate release decision | A 1.0 API freeze requires explicit version and compatibility review; it is not implied by passing gates. |
 
@@ -28,7 +28,7 @@ The table reports implementation readiness, not published tags or full SPARQL
 - Record the dependency policy: release gates test a pinned `odin-rdf` release;
   a separate compatibility job may track its `main` branch.
 
-## M1 — lexer and query syntax (complete, pre-release `0.1.0`)
+## M1 — lexer and query syntax (complete, released in `v0.1.0`)
 
 - Implement a Unicode-aware SPARQL 1.1 lexer with source spans and stable
   diagnostics.
@@ -41,7 +41,7 @@ The table reports implementation readiness, not published tags or full SPARQL
 - The complete five-case SPARQL 1.0 I18N manifest separately gates Unicode
   prefixed names, non-ASCII whitespace, and Unicode IRI normalization identity.
 
-## M2 — algebra and basic graph patterns (complete, pre-release `0.2.0`)
+## M2 — algebra and basic graph patterns (complete, released in `v0.2.0`)
 
 - Translate AST values to a separate algebra representation with resolved
   names, variable identities, and semantic validation.
@@ -55,7 +55,7 @@ The table reports implementation readiness, not published tags or full SPARQL
   four-case SPARQL 1.0 Triple Match manifest separately gates repeated
   variables and two-triple shared-variable joins.
 
-## M3 — graph patterns (complete, pre-release `0.3.0`)
+## M3 — graph patterns (complete, included in `v0.7.0`)
 
 - Add `FILTER`, `OPTIONAL`, `UNION`, `MINUS`, `GRAPH`, `VALUES`, `BIND`, and
   dataset-description semantics.
@@ -67,7 +67,7 @@ The table reports implementation readiness, not published tags or full SPARQL
   manifest separately gates nested OPTIONAL, FILTER scope, and composed
   JOIN/UNION/GRAPH relations.
 
-## M4 — expressions and solution modifiers (`0.4.0`)
+## M4 — expressions and solution modifiers (complete, included in `v0.7.0`)
 
 - Add SPARQL expression evaluation, built-in functions, `EXISTS`, ordering,
   duplicate handling, and slicing.
@@ -121,7 +121,7 @@ The table reports implementation readiness, not published tags or full SPARQL
   case-insensitive matching. Its evaluator retains raw regex capture slots so
   an unmatched alternative group expands as SPARQL requires.
 
-## M5 — advanced query operations (complete, pre-release `0.5.0`)
+## M5 — advanced query operations (complete, included in `v0.7.0`)
 
 - The first subquery slice evaluates `SELECT` subqueries independently and
   applies an explicit projection boundary, including `SELECT *`; it also has
@@ -158,7 +158,7 @@ The table reports implementation readiness, not published tags or full SPARQL
   W3C conformance claim because the pinned SPARQL 1.1 property-path manifest
   does not contain those forms.
 
-## M6 — graph results (complete, pre-release `0.6.0`)
+## M6 — graph results (complete, included in `v0.7.0`)
 
 - `CONSTRUCT` instantiates resolved triple templates into an owned RDF graph;
   unbound template variables omit their triples, result statements have graph
@@ -190,7 +190,7 @@ The table reports implementation readiness, not published tags or full SPARQL
   `GROUP BY`, `HAVING`, `ORDER BY`, `OFFSET`, and `LIMIT` target selection,
   including final `VALUES` after aggregate HAVING; it is not a W3C claim.
 
-## M7 — external integrations (complete, pre-release `0.7.0`)
+## M7 — external integrations (complete, released in `v0.7.0`)
 
 - Optional `SERVICE` callbacks now map an endpoint IRI to an
   application-owned dataset view, preserving correlated bindings and
