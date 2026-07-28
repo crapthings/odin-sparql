@@ -1,9 +1,17 @@
+# odin-sparql
+
 [![CI](https://github.com/crapthings/odin-sparql/actions/workflows/ci.yml/badge.svg)](https://github.com/crapthings/odin-sparql/actions/workflows/ci.yml)
 [![SPARQL 1.1 Query](https://img.shields.io/badge/SPARQL-1.1_Query-2563eb)](https://www.w3.org/TR/sparql11-query/)
 ![Platforms](https://img.shields.io/badge/platforms-Linux_%7C_macOS_%7C_Windows-475569)
 [![License: MIT](https://img.shields.io/badge/license-MIT-f59e0b)](LICENSE)
 
-# odin-sparql
+> **Status:** pre-1.0; M0–M7 are complete and M8 hardening is ongoing.
+>
+> **Role:** a bounded, dataset-agnostic SPARQL 1.1 Query parser and execution
+> engine for Odin.
+>
+> **Not:** a graph Store, SPARQL Protocol endpoint, HTTP client, reasoner, or
+> SPARQL Update implementation.
 
 A bounded, dataset-agnostic implementation of the SPARQL 1.1 Query Language
 for Odin, built on [`odin-rdf`](../odin-rdf). Parse and execute queries over
@@ -18,7 +26,8 @@ SPARQL Update implementation.
 **Start here:** [minimal in-memory example](examples/minimal/main.odin) ·
 [application-owned custom View example](examples/custom_view/main.odin) ·
 [public API overview](#public-api-overview) ·
-[conformance policy](docs/conformance.md) · [roadmap](ROADMAP.md)
+[conformance policy](docs/conformance.md) · [development](#development) ·
+[roadmap](ROADMAP.md)
 
 ## Quick start
 
@@ -43,12 +52,14 @@ The minimal example prints:
 {"head":{"vars":["name"]},"results":{"bindings":[{"name":{"type":"literal","value":"Ada"}}]}}
 ```
 
-## Status and scope
+## Status
 
 `odin-sparql` is pre-1.0. Milestones M0–M7 are complete and M8 is ongoing
 hardening; a 1.0 API freeze remains a deliberate future decision. The
 [roadmap](ROADMAP.md) reports implementation readiness, not published tags or
 a claim of complete SPARQL 1.1 evaluation conformance.
+
+## Scope
 
 | Area | Use it for | Important boundary |
 | --- | --- | --- |
@@ -141,7 +152,7 @@ benchmarks/             Reproducible BGP-planning workloads
 docs/                   Architecture, API, conformance, and release policy
 ```
 
-## Verification
+## Development
 
 For a fast local check with a sibling `odin-rdf` checkout:
 
